@@ -1,4 +1,8 @@
-# Abseil
+<p align="center">
+    <img alt="" src="https://github.com/boris-glumpler/Abseil/blob/develop/abseil.png"/>
+</p>
+
+<h1 align="center">Abseil</h1>
 
 Taking the pain out of creating a JSON:API in your Laravel app
 
@@ -35,8 +39,8 @@ If you discover any security related issues, please email boris@shabushabu.eu in
 
 ## Credits
 
-- [Boris Glumpler](https://github.com/shabushabu)
 - [All Contributors](../../contributors)
+- [Ivan Boyko](https://www.iconfinder.com/visualpharm) for the abseil icon
 
 ## License
 

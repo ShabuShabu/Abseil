@@ -167,10 +167,8 @@ Abseil will then call the following method so you can save the category as you s
 
 ```php
 $page->syncCategory(collect([
-    'data' => [
-        'type' => 'categories',
-        'id' => '9041eabb-932a-4d47-a767-6c799873354a'
-    ]   
+    'type' => 'categories',
+    'id' => '9041eabb-932a-4d47-a767-6c799873354a'
 ]));
 ```
 
@@ -179,9 +177,9 @@ Abseil will throw an error if that method does not exist, so it's your responsib
 Staying with this example, the `Page::syncCategory` method could be as easy as the following:
 
 ```php
-public function syncCategory(Collection $payload): void
+public function syncCategory(Collection $category): void
 {
-    $this->category_id = $payload->get('data')['id'];
+    $this->category_id = $category->get('id');
     $this->save();
 }
 ```

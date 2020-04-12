@@ -216,7 +216,7 @@ class Controller extends BaseController
                 sprintf('Method [%s] does not exist for model [%s]', $method, get_class($model))
             );
 
-            $model->{$method}(collect($relationship));
+            $model->{$method}(collect($relationship['data']));
 
             ResourceRelationshipSaved::dispatch($model, $relationship);
         }

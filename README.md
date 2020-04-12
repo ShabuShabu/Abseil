@@ -40,7 +40,7 @@ If you discover any security related issues, please email boris@shabushabu.eu in
 ## Credits
 
 - [All Contributors](../../contributors)
-- [Ivan Boyko](https://www.iconfinder.com/visualpharm) for the abseil icon
+- [Ivan Boyko](https://www.iconfinder.com/visualpharm) [[cc]](https://creativecommons.org/licenses/by/3.0/) for the abseil icon
 
 ## License
 

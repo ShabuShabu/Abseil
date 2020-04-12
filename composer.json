@@ -1,55 +1,58 @@
 {
-  "name": "shabushabu/abseil",
-  "description": "Taking the pain out of creating a JSON:API in your Laravel app",
-  "keywords": [
-    "shabushabu",
-    "abseil",
-    "json:api"
-  ],
-  "homepage": "https://github.com/boris-glumpler/Abseil",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Boris Glumpler",
-      "email": "boris@shabushabu.eu",
-      "homepage": "https://shabushabu.eu",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "php": "^7.4"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "symfony/var-dumper": "^4.3",
-    "orchestra/testbench": "^5.0",
-    "phpunit/phpunit": "^9.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "ShabuShabu\\Abseil\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "ShabuShabu\\Abseil\\Tests\\": "tests"
-    }
-  },
-  "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "ShabuShabu\\Abseil\\AbseilServiceProvider"
-      ]
-    }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "name": "shabushabu/abseil",
+    "description": "Taking the pain out of creating a JSON:API in your Laravel app",
+    "keywords": [
+        "shabushabu",
+        "abseil",
+        "json:api"
+    ],
+    "homepage": "https://github.com/ShabuShabu/Abseil",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Boris Glumpler",
+            "email": "boris@shabushabu.eu",
+            "homepage": "https://shabushabu.eu",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "symfony/var-dumper": "^4.3",
+        "orchestra/testbench": "^5.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShabuShabu\\Abseil\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ShabuShabu\\Abseil\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ShabuShabu\\Abseil\\AbseilServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

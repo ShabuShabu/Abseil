@@ -19,7 +19,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./Packages/Harness",
+            "url": "../Harness",
             "options": {
                 "symlink": true
             }
@@ -40,7 +40,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "symfony/var-dumper": "^4.3",
+        "symfony/var-dumper": "^5.0",
         "orchestra/testbench": "^5.0",
         "phpunit/phpunit": "^9.0"
     },

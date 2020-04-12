@@ -248,7 +248,7 @@ All models should also implement the `Queryable` interface. It only requires a s
 public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder;
 ```
 
-Here you can then [configure the query builder](https://docs.spatie.be/laravel-query-builder/v2/introduction/), add sorts, includes, filter, etc.
+Here you can then [configure the query builder](https://docs.spatie.be/laravel-query-builder/v2/introduction/), add sorts, includes, filters, etc.
 
 ## Testing
 

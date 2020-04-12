@@ -11,12 +11,12 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 - Extract tests from original package
 - Make it easier to configure
 - Publish to Packagist
-- Add a middleware to check for [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
+- Add a middleware to check for and set [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
 - Enjoy rock star status and live the good life
 
 ## Installation
 
-You can eventually install the package via composer (:bangbang: once it has been published to Packagist...):
+You will eventually be able to install the package via composer (:bangbang: once it's been published to Packagist...):
 
 ```
 $ composer require shabushabu/abseil
@@ -176,9 +176,19 @@ $page->syncCategory(collect([
 
 Abseil will throw an error if that method does not exist, so it's your responsibility to make sure it's there when you allow saving relationships via ShabuShabu Harness requests.
 
+Staying with this example, the `Page::syncCategory` method could be as easy as the following:
+
+```php
+public function syncCategory(Collection $payload): void
+{
+    $this->category_id = $payload->get('data')['id'];
+    $this->save();
+}
+```
+
 ### Resources
 
-Resources have always been my biggest stumbling block when trying to create a valid JSON:API. With Abseil, tho, the following is possible:
+Resources have always been my biggest stumbling block when trying to create a valid JSON:API. With Abseil, though, the following is possible:
 Note that we're only specifying the `data.attributes` here. Anything else, like relationships, will be handled for you.
 
 ```php

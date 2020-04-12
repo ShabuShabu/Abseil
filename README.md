@@ -27,7 +27,7 @@ $ composer require shabushabu/abseil
 If you don't use a [morph map](https://laravel.com/docs/7.x/eloquent-relationships#custom-polymorphic-types) yet, now's the time to get your foot in the door. Just chuck all your models in there so Abseil can do it's magic.
 Keep the keys the same as your route parameters, btw. Strictly speaking Abseil only requires the `MORPH_MAP` constant, but you might as well go all in. Bet on that rope to hold your weight...
 
-``` php
+```php
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -212,7 +212,7 @@ class Page extends Resource
 If, for example, there is a user relationship and it was specified via the `include` query parameter, then Abseil will load that relationship automatically for you and attach it to the response.
 [ShabuShabu Belay](https://github.com/ShabuShabus/Belay) is the perfect counter part for Abseil and will handle the JS side of things. Great if you want to create a client app for your API using Vue or Nuxt.
 
-### Pagination
+### Resource Collections
 
 Collection resources do not need to be specifically created, although you can if you want to. Abseil will use its own collection class by default for any `index` responses.
 One thing to note here is that the default Laravel pagination data is being transformed to camel-case:
@@ -234,6 +234,21 @@ One thing to note here is that the default Laravel pagination data is being tran
     [...]
 }
 ```
+
+All models should also implement the `Queryable` interface. It only requires a single method: `modifyPagedQuery`.
+
+```php
+/**
+ * Modify the query
+ *
+ * @param \Spatie\QueryBuilder\QueryBuilder $query
+ * @param \Illuminate\Http\Request $request
+ * @return \Spatie\QueryBuilder\QueryBuilder
+ */
+public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder;
+```
+
+Here you can then [configure the query builder](https://docs.spatie.be/laravel-query-builder/v2/introduction/), add sorts, includes, filter, etc.
 
 ## Testing
 

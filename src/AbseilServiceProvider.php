@@ -54,6 +54,10 @@ class AbseilServiceProvider extends ServiceProvider
      */
     protected function mapRoutePatterns(): void
     {
+        if (!$this->app['config']->get('abseil.use_uuids')) {
+            return;
+        }
+
         foreach ($this->uuidParams() as $param) {
             Route::pattern($param, self::$uuidPattern);
         }

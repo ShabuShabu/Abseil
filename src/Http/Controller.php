@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\{Arr, Collection as BaseCollection, Str};
 use LogicException;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Trashable};
-use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelationshipSaved};
+use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelationshipSaved, ResourceUpdated};
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use function ShabuShabu\Abseil\{inflate, model_name, resource_guard};
@@ -148,6 +148,8 @@ class Controller extends BaseController
         }
 
         $this->saveRelationships($request, $model);
+
+        ResourceUpdated::dispatch($response);
 
         return $this->noContent();
     }

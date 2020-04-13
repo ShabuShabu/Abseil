@@ -24,8 +24,8 @@ abstract class Model extends Eloquent implements HeaderValues, Queryable
 {
     use GenerateUuidOnCreate;
 
-    public const JSON_TYPE = '';
-    public const ROUTE_PARAM = '';
+    public const JSON_TYPE        = '';
+    public const ROUTE_PARAM      = '';
     public const ALLOWED_INCLUDES = [];
 
     /**

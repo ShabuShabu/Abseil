@@ -11,9 +11,9 @@ use Illuminate\Support\{Arr, Collection as BaseCollection, Str};
 use LogicException;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Trashable};
 use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelationshipSaved, ResourceUpdated};
+use function ShabuShabu\Abseil\{inflate, model_name, resource_guard};
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
-use function ShabuShabu\Abseil\{inflate, model_name, resource_guard};
 
 class Controller extends BaseController
 {
@@ -44,7 +44,7 @@ class Controller extends BaseController
 
         $resource = $resourceNamespace . class_basename($class);
 
-        if (!class_exists($collection = $resource . 'Collection')) {
+        if (! class_exists($collection = $resource . 'Collection')) {
             $collection = $resourceNamespace . 'Collection';
         }
 
@@ -71,7 +71,7 @@ class Controller extends BaseController
             $model($request) :
             call_user_func([$model, 'create'], $this->modelFieldsFrom($request));
 
-        if (!$response) {
+        if (! $response) {
             return $this->badGateway();
         }
 
@@ -143,7 +143,7 @@ class Controller extends BaseController
             $callback($request, $model) :
             $model->fill($this->modelFieldsFrom($request))->save();
 
-        if (!$response) {
+        if (! $response) {
             return $this->badGateway();
         }
 
@@ -165,7 +165,7 @@ class Controller extends BaseController
     {
         $this->authorize('delete', $model);
 
-        if (!($model instanceof Trashable ? $model->trashOrDelete() : $model->delete())) {
+        if (! ($model instanceof Trashable ? $model->trashOrDelete() : $model->delete())) {
             return $this->badGateway();
         }
 
@@ -185,11 +185,11 @@ class Controller extends BaseController
     {
         $this->authorize('delete', $model);
 
-        if (!$model->trashed()) {
+        if (! $model->trashed()) {
             return $this->notModified();
         }
 
-        if (!$model->restore()) {
+        if (! $model->restore()) {
             return $this->badGateway();
         }
 
@@ -238,10 +238,10 @@ class Controller extends BaseController
 
         return collect(Arr::dot($data))
             ->mapWithKeys(
-                fn($value, $key) => [str_replace('attributes.', '', $key) => $value]
+                fn ($value, $key) => [str_replace('attributes.', '', $key) => $value]
             )
             ->pipe(
-                fn(BaseCollection $collection) => inflate($collection, $asArray)
+                fn (BaseCollection $collection) => inflate($collection, $asArray)
             );
     }
 }

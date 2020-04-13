@@ -22,7 +22,7 @@ function morph_map(): Collection
  */
 function is_authenticated_request(): bool
 {
-    if (!$route = Route::current()) {
+    if (! $route = Route::current()) {
         return false;
     }
 
@@ -54,10 +54,10 @@ function to_camel_case(array $data): array
 function get_first_resource(string $namespace, $model, string $suffix = '')
 {
     $namespace = rtrim($namespace, '\\') . '\\';
-    $resource = $namespace . class_basename($model) . $suffix;
+    $resource  = $namespace . class_basename($model) . $suffix;
 
-    while (!class_exists($resource)) {
-        if (!$model = get_parent_class($model)) {
+    while (! class_exists($resource)) {
+        if (! $model = get_parent_class($model)) {
             throw new LogicException('No parent class found.');
         }
 
@@ -86,7 +86,7 @@ function model_name($query): string
  */
 function resource_guard($resource): void
 {
-    if (!class_exists($resource)) {
+    if (! class_exists($resource)) {
         throw new InvalidArgumentException('Resource does not exist: ' . $resource);
     }
 }

@@ -45,7 +45,7 @@ class AbseilServiceProvider extends ServiceProvider
     protected function boundResources(): Collection
     {
         return morph_map()->filter(
-            fn($model, $key) => $model::ROUTE_PARAM === $key
+            fn ($model, $key) => $model::ROUTE_PARAM === $key
         );
     }
 
@@ -54,7 +54,7 @@ class AbseilServiceProvider extends ServiceProvider
      */
     protected function mapRoutePatterns(): void
     {
-        if (!$this->app['config']->get('abseil.use_uuids')) {
+        if (! $this->app['config']->get('abseil.use_uuids')) {
             return;
         }
 
@@ -69,8 +69,9 @@ class AbseilServiceProvider extends ServiceProvider
     protected function mapRouteParameters(): void
     {
         foreach ($this->boundResources() as $param => $class) {
-            Route::bind($param,
-                fn(string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
+            Route::bind(
+                $param,
+                fn (string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }
     }

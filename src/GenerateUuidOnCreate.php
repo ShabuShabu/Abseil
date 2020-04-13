@@ -13,7 +13,7 @@ trait GenerateUuidOnCreate
     protected static function bootGenerateUuidOnCreate(): void
     {
         static::creating(static function (Model $model) {
-            if (!Uuid::isValid($model->getKey())) {
+            if (! Uuid::isValid($model->getKey())) {
                 $model->setAttribute($this->getKeyName(), Str::orderedUuid()->toString());
             }
         });

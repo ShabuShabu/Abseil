@@ -1,4 +1,4 @@
-name: run-tests
+name: Run PHPUnit tests
 
 on: [push, pull_request]
 

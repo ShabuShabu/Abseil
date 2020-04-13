@@ -7,8 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\{Collection};
 use stdClass;
 
 /**
@@ -102,13 +102,13 @@ class Resource extends JsonResource
         /** @var Collection $includes */
         $includes = collect($this->resource::ALLOWED_INCLUDES)
             ->reduce(
-                fn(Collection $includes, string $relation) => $this->included($includes, $relation),
+                fn (Collection $includes, string $relation) => $this->included($includes, $relation),
                 collect()
             )
             ->filter();
 
         return $this->when(
-            !$this->isEmpty($includes),
+            ! $this->isEmpty($includes),
             $includes->unique('id')->values()->toArray()
         );
     }
@@ -138,11 +138,11 @@ class Resource extends JsonResource
     {
         $relationships = collect($this->resource::ALLOWED_INCLUDES)
             ->mapWithKeys(
-                fn($relation, $key) => [$relation => $this->relationship($relation)]
+                fn ($relation, $key) => [$relation => $this->relationship($relation)]
             );
 
         return $this->when(
-            !$this->isEmpty($relationships),
+            ! $this->isEmpty($relationships),
             $relationships->toArray()
         );
     }
@@ -154,7 +154,7 @@ class Resource extends JsonResource
     protected function isEmpty(Collection $collection): bool
     {
         return $collection
-            ->filter(fn($item) => !$item instanceof MissingValue)
+            ->filter(fn ($item) => ! $item instanceof MissingValue)
             ->isEmpty();
     }
 
@@ -192,7 +192,7 @@ class Resource extends JsonResource
         $relation = $this->resource->{$relation};
 
         return $relation instanceof Collection ?
-            $relation->map(fn($model) => $this->rel($model)) :
+            $relation->map(fn ($model) => $this->rel($model)) :
             $this->rel($relation);
     }
 
@@ -202,7 +202,7 @@ class Resource extends JsonResource
      */
     protected function relationship(string $relation)
     {
-        return $this->whenLoaded($relation, fn() => [
+        return $this->whenLoaded($relation, fn () => [
             'links' => [
                 'related' => $this->route($relation),
             ],

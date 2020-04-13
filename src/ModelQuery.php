@@ -18,7 +18,7 @@ class ModelQuery
      */
     protected function __construct(Builder $query, Request $request)
     {
-        $this->query = QueryBuilder::for($query, $request);
+        $this->query   = QueryBuilder::for($query, $request);
         $this->request = $request;
     }
 
@@ -48,7 +48,7 @@ class ModelQuery
      */
     protected function allowedFilters(): array
     {
-        if (!is_authenticated_request()) {
+        if (! is_authenticated_request()) {
             return [];
         }
 

@@ -45,8 +45,11 @@ class Collection extends ResourceCollection
         $includes = $this->resource->reduce(function (BaseCollection $collection, Resource $resource) {
             $includes = collect($resource->resource::ALLOWED_INCLUDES)
                 ->reduce(
-                    fn(BaseCollection $includes, string $relation) => $this->included($includes, $relation,
-                        $resource->resource),
+                    fn (BaseCollection $includes, string $relation) => $this->included(
+                        $includes,
+                        $relation,
+                        $resource->resource
+                    ),
                     collect()
                 );
 
@@ -93,7 +96,7 @@ class Collection extends ResourceCollection
             $default = new MissingValue;
         }
 
-        if (!$model->relationLoaded($relationship)) {
+        if (! $model->relationLoaded($relationship)) {
             return value($default);
         }
 

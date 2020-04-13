@@ -33,9 +33,9 @@ class PaginatedResourceResponse extends Response
     {
         return collect(parent::meta($paginated))
             ->map(
-                fn($value) => is_numeric($value) ? (int)$value : $value
+                fn ($value) => is_numeric($value) ? (int)$value : $value
             )->pipe(
-                fn(Collection $meta) => to_camel_case($meta->toArray())
+                fn (Collection $meta) => to_camel_case($meta->toArray())
             );
     }
 }

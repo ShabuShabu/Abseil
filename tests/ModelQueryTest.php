@@ -2,9 +2,9 @@
 
 namespace ShabuShabu\Abseil\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\TestCase;
 
-class ExampleTest extends TestCase
+class ModelQueryTest extends TestCase
 {
     /**
      * @test

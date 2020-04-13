@@ -11,7 +11,6 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 - Extract tests from original package
 - Make it easier to configure
 - Publish to Packagist
-- Add Github actions for CS fixer and Phpunit
 - Add a middleware to check for and set [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
 - Enjoy rock star status and live the good life
 

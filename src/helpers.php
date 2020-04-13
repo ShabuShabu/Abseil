@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ShabuShabu\Abseil;
@@ -25,7 +26,7 @@ function is_authenticated_request(): bool
         return false;
     }
 
-    return in_array('auth:api', $route->gatherMiddleware(), true);
+    return in_array(config('abseil.auth_middleware'), $route->gatherMiddleware(), true);
 }
 
 /**

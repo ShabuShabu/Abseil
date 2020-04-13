@@ -16,6 +16,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Auth Middleware
+    |--------------------------------------------------------------------------
+    |
+    | By default Abseil assumes that you're using Laravel Passport. It uses
+    | this middleware to figure out when exactly to allow query filters for
+    | route model binding.
+    |
+    */
+
+    'auth_middleware' => 'auth:api',
+
+    /*
+    |--------------------------------------------------------------------------
     | Resource Namespace
     |--------------------------------------------------------------------------
     |

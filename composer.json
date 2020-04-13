@@ -18,11 +18,8 @@
     ],
     "repositories": [
         {
-            "type": "path",
-            "url": "../Harness",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "https://github.com/ShabuShabu/Harness"
         }
     ],
     "require": {
@@ -35,7 +32,7 @@
         "illuminate/support": "^7.0",
         "nesbot/carbon": "^2.0",
         "ramsey/uuid": "^4.0",
-        "shabushabu/harness": "@dev",
+        "shabushabu/harness": "1.0.x-dev",
         "spatie/laravel-query-builder": "^2.0"
     },
     "require-dev": {
@@ -70,6 +67,9 @@
             "providers": [
                 "ShabuShabu\\Abseil\\AbseilServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
         }
     },
     "minimum-stability": "dev",

@@ -1,18 +1,18 @@
 <?php
 
 $finder = Symfony\Component\Finder\Finder::create()
-     ->notPath('bootstrap/*')
-     ->notPath('storage/*')
-     ->notPath('storage/*')
-     ->notPath('resources/view/mail/*')
-     ->in([
-         __DIR__ . '/src',
-         __DIR__ . '/tests',
-     ])
-     ->name('*.php')
-     ->notName('*.blade.php')
-     ->ignoreDotFiles(true)
-     ->ignoreVCS(true);
+                                         ->notPath('bootstrap/*')
+                                         ->notPath('storage/*')
+                                         ->notPath('storage/*')
+                                         ->notPath('resources/view/mail/*')
+                                         ->in([
+                                             __DIR__ . '/src',
+                                             __DIR__ . '/tests',
+                                         ])
+                                         ->name('*.php')
+                                         ->notName('*.blade.php')
+                                         ->ignoreDotFiles(true)
+                                         ->ignoreVCS(true);
 
 return PhpCsFixer\Config::create()->setRules([
     '@PSR2'                             => true,
@@ -23,8 +23,10 @@ return PhpCsFixer\Config::create()->setRules([
     'trailing_comma_in_multiline_array' => true,
     'phpdoc_scalar'                     => true,
     'unary_operator_spaces'             => true,
-    'binary_operator_spaces'            => true,
-    'align_double_arrow'                => true,
+    'binary_operator_spaces'            => [
+        'align_equals'       => true,
+        'align_double_arrow' => true,
+    ],
     'single_import_per_statement'       => false,
     'blank_line_before_statement'       => [
         'statements' => ['break', 'continue', 'declare', 'return', 'throw', 'try'],

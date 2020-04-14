@@ -2,7 +2,7 @@
 
 namespace ShabuShabu\Abseil\Tests;
 
-use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class HelpersTest extends TestCase
 {

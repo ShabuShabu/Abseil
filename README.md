@@ -4,14 +4,22 @@
 
 <h1 align="center">Abseil</h1>
 
+<p align="center">
+    <a href="https://github.com/ShabuShabu/Abseil/actions?query=workflow%3A%22Run+PHPUnit+tests%22">
+        <img alt="PHPUnit Tests" src="https://github.com/ShabuShabu/Abseil/workflows/Run%20PHPUnit%20tests/badge.svg"/>
+    </a>
+    <a href="https://github.com/ShabuShabu/Abseil/blob/develop/LICENSE.md">
+        <img alt="GitHub license" src="https://img.shields.io/github/license/ShabuShabu/Abseil">
+    </a>
+</p>
+
 Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in your [Laravel](https://laravel.com/) app
 
 ## ToDo
 
 - Extract tests from original package
-- Make it easier to configure
 - Publish to Packagist
-- Add a middleware to check for and set [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
+- Add a middleware to check for [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
 - Enjoy rock star status and live the good life
 
 ## Installation
@@ -250,6 +258,16 @@ public static function modifyPagedQuery(QueryBuilder $query, Request $request): 
 
 Here you can then [configure the query builder](https://docs.spatie.be/laravel-query-builder/v2/introduction/), add sorts, includes, filters, etc.
 
+### Routing
+
+The only thing Abseil expects form your application as far as routing is concerned is that you name your single `GET` routes according to a certain convention:
+
+```
+'{JSON_TYPE}.show'
+```
+
+That way, Abseil can automatically create the links section for you.
+
 ## Testing
 
 Abseil has been extracted from a [personal project](https://boris.travelled.today). It is fully unit tested, but the tests are still intermingled with original project tests and will make their way into this repository in due course. 
@@ -277,6 +295,7 @@ Abseil is still young and while it is tested, there will probs be bugs. I will t
 ## Credits
 
 - [All Contributors](../../contributors)
+- [BTT](https://boris.travelled.today), aka **Boris Travelled Today**, where Abseil was extracted from
 - [Ivan Boyko](https://www.iconfinder.com/visualpharm) [[cc]](https://creativecommons.org/licenses/by/3.0/) for the abseil icon
 
 ## License

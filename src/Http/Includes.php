@@ -3,7 +3,7 @@
 namespace ShabuShabu\Abseil\Http;
 
 use Illuminate\Http\Resources\MissingValue;
-use function ShabuShabu\Abseil\get_first_resource;
+use LogicException;
 
 trait Includes
 {
@@ -27,6 +27,17 @@ trait Includes
      */
     protected function resourceClass($related): string
     {
-        return get_first_resource(__NAMESPACE__, $related);
+        $namespace = rtrim(__NAMESPACE__, '\\') . '\\';
+        $resource  = $namespace . class_basename($related);
+
+        while (! class_exists($resource)) {
+            if (! $related = get_parent_class($related)) {
+                throw new LogicException("No parent class found for [$related]");
+            }
+
+            $resource = $namespace . class_basename($related);
+        }
+
+        return $resource;
     }
 }

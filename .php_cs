@@ -23,6 +23,7 @@ return PhpCsFixer\Config::create()->setRules([
     'trailing_comma_in_multiline_array' => true,
     'phpdoc_scalar'                     => true,
     'unary_operator_spaces'             => true,
+    'function_declaration'              => 'one',
     'binary_operator_spaces'            => [
         'align_equals'       => true,
         'align_double_arrow' => true,

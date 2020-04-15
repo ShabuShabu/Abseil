@@ -7,8 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\{Collection};
+use Illuminate\Support\Facades\Route;
 use stdClass;
 
 /**
@@ -47,7 +47,7 @@ class Resource extends JsonResource
     protected function toObject($value)
     {
         if ($value instanceof Arrayable) {
-            return empty($value->toArray()) ? new stdClass() : $value;
+            $value = $value->toArray();
         }
 
         if (is_array($value)) {
@@ -85,13 +85,7 @@ class Resource extends JsonResource
      */
     protected function ownerOnly($id, $value, $default = null)
     {
-        $user = auth()->user();
-
-        return $this->when(
-            is_string($id) || ($user->id ?? null) === $id,
-            $value,
-            $default
-        );
+        return $this->when(auth()->id() === $id, $value, $default);
     }
 
     /**
@@ -100,12 +94,10 @@ class Resource extends JsonResource
     protected function includes()
     {
         /** @var Collection $includes */
-        $includes = collect($this->resource::ALLOWED_INCLUDES)
-            ->reduce(
-                fn (Collection $includes, string $relation) => $this->included($includes, $relation),
-                collect()
-            )
-            ->filter();
+        $includes = $this->allowedIncludes()->reduce(
+            fn(Collection $includes, string $relation) => $this->included($includes, $relation),
+            collect()
+        )->filter();
 
         return $this->when(
             ! $this->isEmpty($includes),
@@ -136,10 +128,9 @@ class Resource extends JsonResource
      */
     protected function relationships()
     {
-        $relationships = collect($this->resource::ALLOWED_INCLUDES)
-            ->mapWithKeys(
-                fn ($relation, $key) => [$relation => $this->relationship($relation)]
-            );
+        $relationships = $this->allowedIncludes()->mapWithKeys(
+            fn($relation, $key) => [$relation => $this->relationship($relation)]
+        );
 
         return $this->when(
             ! $this->isEmpty($relationships),
@@ -154,7 +145,7 @@ class Resource extends JsonResource
     protected function isEmpty(Collection $collection): bool
     {
         return $collection
-            ->filter(fn ($item) => ! $item instanceof MissingValue)
+            ->filter(fn($item) => ! $item instanceof MissingValue)
             ->isEmpty();
     }
 
@@ -192,7 +183,7 @@ class Resource extends JsonResource
         $relation = $this->resource->{$relation};
 
         return $relation instanceof Collection ?
-            $relation->map(fn ($model) => $this->rel($model)) :
+            $relation->map(fn($model) => $this->rel($model)) :
             $this->rel($relation);
     }
 
@@ -202,7 +193,7 @@ class Resource extends JsonResource
      */
     protected function relationship(string $relation)
     {
-        return $this->whenLoaded($relation, fn () => [
+        return $this->whenLoaded($relation, fn() => [
             'links' => [
                 'related' => $this->route($relation),
             ],
@@ -216,5 +207,13 @@ class Resource extends JsonResource
     public function withResponse($request, $response): void
     {
         $response->withHeaders(self::DEFAULT_HEADERS);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    protected function allowedIncludes(): Collection
+    {
+        return collect($this->resource::ALLOWED_INCLUDES);
     }
 }

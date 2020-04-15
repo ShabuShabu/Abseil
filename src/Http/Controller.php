@@ -3,7 +3,7 @@
 namespace ShabuShabu\Abseil\Http;
 
 use Closure;
-use Illuminate\Database\Eloquent\{Model, Relations\Relation};
+use Illuminate\Database\Eloquent\{Builder, Model, Relations\Relation};
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\{Request as HttpRequest, Response};
 use Illuminate\Routing\Controller as BaseController;
@@ -11,9 +11,9 @@ use Illuminate\Support\{Arr, Collection as BaseCollection, Str};
 use LogicException;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Trashable};
 use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelationshipSaved, ResourceUpdated};
-use function ShabuShabu\Abseil\{inflate, model_name, resource_guard};
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
+use function ShabuShabu\Abseil\{inflate, resource_guard};
 
 class Controller extends BaseController
 {
@@ -38,14 +38,16 @@ class Controller extends BaseController
             $query = $query->getQuery();
         }
 
-        $this->authorize('overview', $class = model_name($query));
+        $class = $query instanceof Builder ? get_class($query->getModel()) : $query;
 
-        $resourceNamespace = config('abseil.resource_namespace');
+        $this->authorize('overview', $class);
 
-        $resource = $resourceNamespace . class_basename($class);
+        $namespace = config('abseil.resource_namespace');
+
+        $resource = $namespace . class_basename($class);
 
         if (! class_exists($collection = $resource . 'Collection')) {
-            $collection = $resourceNamespace . 'Collection';
+            $collection = $namespace . 'Collection';
         }
 
         resource_guard($collection);
@@ -238,10 +240,10 @@ class Controller extends BaseController
 
         return collect(Arr::dot($data))
             ->mapWithKeys(
-                fn ($value, $key) => [str_replace('attributes.', '', $key) => $value]
+                fn($value, $key) => [str_replace('attributes.', '', $key) => $value]
             )
             ->pipe(
-                fn (BaseCollection $collection) => inflate($collection, $asArray)
+                fn(BaseCollection $collection) => inflate($collection, $asArray)
             );
     }
 }

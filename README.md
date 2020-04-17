@@ -268,6 +268,29 @@ The only thing Abseil expects form your application as far as routing is concern
 
 That way, Abseil can automatically create the links section for you.
 
+### Exceptions
+
+Abseil ships with a couple exceptions to transform errors into valid JSON:API format. To use them, just add the following to your exception handler:
+
+```php
+public function render($request, Throwable $exception): Response
+{
+    // ...
+
+    if ($exception instanceof \Illuminate\Validation\ValidationException) {
+        $exception = \ShabuShabu\Abseil\Exceptions\ValidationException::withMessages($exception->errors());
+    }
+
+    if ($exception instanceof \Spatie\QueryBuilder\Exceptions\InvalidQuery) {
+        $exception = \ShabuShabu\Abseil\Exceptions\InvalidQueryException::from($exception);
+    }
+
+    // ...
+
+    return parent::render($request, $exception);
+}
+```
+
 ## Testing
 
 Abseil has been extracted from a [personal project](https://boris.travelled.today). It is fully unit tested, but the tests are still intermingled with original project tests and will make their way into this repository in due course. 

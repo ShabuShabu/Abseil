@@ -1,11 +1,11 @@
 <?php
 
-namespace ShabuShabu\Abseil\Tests\Support\Controllers;
+namespace ShabuShabu\Abseil\Tests\App\Controllers;
 
 use Illuminate\Http\{Request, Response};
 use ShabuShabu\Abseil\Http\{Collection, Controller};
-use ShabuShabu\Abseil\Tests\Support\Page;
-use ShabuShabu\Abseil\Tests\Support\Requests\PageRequest;
+use ShabuShabu\Abseil\Tests\App\Page;
+use ShabuShabu\Abseil\Tests\App\Requests\PageRequest;
 
 class PageController extends Controller
 {

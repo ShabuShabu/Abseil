@@ -1,11 +1,11 @@
 <?php
 
-namespace ShabuShabu\Abseil\Tests\Support\Resources;
+namespace ShabuShabu\Abseil\Tests\App\Resources;
 
 use ShabuShabu\Abseil\Http\Resource;
 
 /**
- * @mixin \ShabuShabu\Abseil\Tests\Support\User
+ * @mixin \ShabuShabu\Abseil\Tests\App\User
  */
 class User extends Resource
 {

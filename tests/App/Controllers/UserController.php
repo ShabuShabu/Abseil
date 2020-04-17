@@ -1,11 +1,11 @@
 <?php
 
-namespace ShabuShabu\Abseil\Tests\Support\Controllers;
+namespace ShabuShabu\Abseil\Tests\App\Controllers;
 
 use Illuminate\Http\{Request, Response};
 use ShabuShabu\Abseil\Http\{Collection, Controller};
-use ShabuShabu\Abseil\Tests\Support\Requests\UserRequest;
-use ShabuShabu\Abseil\Tests\Support\User;
+use ShabuShabu\Abseil\Tests\App\Requests\UserRequest;
+use ShabuShabu\Abseil\Tests\App\User;
 
 class UserController extends Controller
 {

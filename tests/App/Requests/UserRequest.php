@@ -1,6 +1,6 @@
 <?php
 
-namespace ShabuShabu\Abseil\Tests\Support\Requests;
+namespace ShabuShabu\Abseil\Tests\App\Requests;
 
 use ShabuShabu\Harness\Request;
 use function ShabuShabu\Harness\r;

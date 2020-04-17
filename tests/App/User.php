@@ -1,6 +1,6 @@
 <?php
 
-namespace ShabuShabu\Abseil\Tests\Support;
+namespace ShabuShabu\Abseil\Tests\App;
 
 use Illuminate\Database\Eloquent\{Relations\HasMany, SoftDeletes};
 use Illuminate\Http\Request;

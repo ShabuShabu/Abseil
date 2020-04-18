@@ -58,7 +58,7 @@ return [
    |--------------------------------------------------------------------------
    |
    | This section configures the policies lookup for you. It is based on the
-   | following pattern: {namespace}\{class}{suffix}. With the default
+   | following pattern: {namespace}\{className}{suffix}. With the default
    | values and for a User model you would get the following
    | location: App\Policies\UserPolicy
    |

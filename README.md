@@ -19,7 +19,6 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 
 - Extract tests from original package
 - Publish to Packagist
-- Add readme section about policies
 - Enjoy rock star status and live the good life
 
 ## Installation
@@ -299,6 +298,12 @@ There's a middleware that you can use for all your JSON:API enabled routes. It's
 If using the class directly is more your cup of tea, you can find it here: `\ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType` 
 
 This middleware checks if the `Content-Type` header matches `application/vnd.api+json` and throws an `UnsupportedMediaTypeHttpException` if it doesn't.
+
+### Policies
+
+Abseil will guess the policy names for you. By default it will assume that your policies are located here: ` App\Policies`.
+It is also assumed that policy naming follows this convention: `{className}Policy`, so for example `PagePolicy`. 
+This functionality can be completely disabled.
 
 ## Testing
 

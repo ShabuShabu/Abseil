@@ -6,6 +6,7 @@ namespace ShabuShabu\Abseil;
 
 use Illuminate\Support\{Arr, Collection, Facades\Route, Str};
 use InvalidArgumentException;
+use LogicException;
 
 /**
  * @return \Illuminate\Support\Collection
@@ -76,4 +77,26 @@ function inflate(iterable $array, bool $asArray = true): iterable
     }
 
     return $asArray ? $inflated : collect($inflated);
+}
+
+/**
+ * @param string        $namespace
+ * @param string|object $model
+ * @param string        $suffix
+ * @return string|null
+ */
+function get_first_resource(string $namespace, $model, string $suffix = '')
+{
+    $namespace = rtrim($namespace, '\\') . '\\';
+    $resource  = $namespace . class_basename($model) . $suffix;
+
+    while (! class_exists($resource)) {
+        if (! $model = get_parent_class($model)) {
+            throw new LogicException('No parent class found.');
+        }
+
+        $resource = $namespace . class_basename($model) . $suffix;
+    }
+
+    return $resource;
 }

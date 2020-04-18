@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'resource_namespace' => 'App\\Http\\Resources\\',
+    'resource_namespace' => 'App\\Http\\Resources',
 
     /*
     |--------------------------------------------------------------------------
@@ -47,8 +47,26 @@ return [
     |
     | Set this to the location where your morph map is available from.
     | Abseil expects there to be a public constant named MORPH_MAP
-    |s
+    |
     */
 
     'morph_map_location' => 'App\\Providers\\AppServiceProvider',
+
+    /*
+   |--------------------------------------------------------------------------
+   | Policies
+   |--------------------------------------------------------------------------
+   |
+   | This section configures the policies lookup for you. It is based on the
+   | following pattern: {namespace}\{class}{suffix}. With the default
+   | values and for a User model you would get the following
+   | location: App\Policies\UserPolicy
+   |
+   */
+
+    'policies' => [
+        'disable'   => false,
+        'namespace' => 'App\\Policies',
+        'suffix'    => 'Policy',
+    ],
 ];

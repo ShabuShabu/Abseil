@@ -122,9 +122,8 @@ class Controller extends BaseController
         $this->authorize('view', $model);
 
         resource_guard(
-            $resource = $resource ?: config('abseil.resource_namespace') . class_basename($model)
+            $resource = $resource ?: rtrim(config('abseil.resource_namespace'), '\\') . '\\' . class_basename($model)
         );
-
         $includes = QueryBuilderRequest::fromRequest($request)
                                        ->includes()
                                        ->intersect($model::ALLOWED_INCLUDES)

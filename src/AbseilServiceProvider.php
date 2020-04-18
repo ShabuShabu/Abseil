@@ -2,7 +2,8 @@
 
 namespace ShabuShabu\Abseil;
 
-use Illuminate\Support\{Collection, Facades\Route, ServiceProvider};
+use Illuminate\Support\{Collection, ServiceProvider};
+use Illuminate\Support\Facades\{Gate, Route};
 use ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType;
 
 class AbseilServiceProvider extends ServiceProvider
@@ -22,6 +23,7 @@ class AbseilServiceProvider extends ServiceProvider
 
         $this->app['router']->aliasMiddleware('json.api', JsonApiMediaType::class);
 
+        $this->guessPolicies();
         $this->mapRoutePatterns();
         $this->mapRouteParameters();
     }
@@ -77,5 +79,21 @@ class AbseilServiceProvider extends ServiceProvider
                 fn(string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }
+    }
+
+    /**
+     * Guess the policies
+     */
+    protected function guessPolicies(): void
+    {
+        $config = $this->app['config']->get('abseil.policies');
+
+        if ($config['disable'] === true) {
+            return;
+        }
+
+        Gate::guessPolicyNamesUsing(
+            static fn(string $className) => get_first_resource($config['namespace'], $className, $config['suffix'])
+        );
     }
 }

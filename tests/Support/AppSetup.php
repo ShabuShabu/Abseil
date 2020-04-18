@@ -27,7 +27,8 @@ trait AppSetup
     {
         $this->setupRouting($app['router']);
 
-        $app['config']->set('abseil.resource_namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Resources\\');
+        $app['config']->set('abseil.policies.namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Policies');
+        $app['config']->set('abseil.resource_namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Resources');
         $app['config']->set('abseil.morph_map_location', AppServiceProvider::class);
 
         $app['config']->set('database.default', 'abseil');

@@ -15,7 +15,10 @@ class CreateUsersTable extends Migration
         Schema::create('users', static function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->boolean('is_admin');
+            $table->string('password');
             $table->string('email');
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

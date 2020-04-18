@@ -13,9 +13,18 @@ trait GenerateUuidOnCreate
     protected static function bootGenerateUuidOnCreate(): void
     {
         static::creating(static function (Model $model) {
-            if (! Uuid::isValid($model->getKey())) {
-                $model->setAttribute($this->getKeyName(), Str::orderedUuid()->toString());
+            if (! config('abseil.use_uuids')) {
+                return;
             }
+
+            if (is_string($id = $model->getKey()) && Uuid::isValid($id)) {
+                return;
+            }
+
+            $model->setAttribute(
+                $model->getKeyName(),
+                Str::orderedUuid()->toString()
+            );
         });
     }
 }

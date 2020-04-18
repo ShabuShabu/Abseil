@@ -7,9 +7,7 @@ use Illuminate\Support\Str;
 use ShabuShabu\Abseil\Tests\App\{Category};
 
 $factory->define(Category::class, fn(Faker $faker) => [
-    'id'      => null,
-    'title'   => $faker->sentence,
-    'content' => $faker->paragraphs(3, true),
+    'title' => $faker->word,
 ]);
 
 $factory->state(Category::class, 'withId', fn() => [

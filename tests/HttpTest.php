@@ -15,6 +15,10 @@ class HttpTest extends TestCase
      */
     public function ensure_true_is_true(): void
     {
+        $this->actingAs($this->authenticatedUser);
 
+        $response = $this->getJson('pages');
+
+        dd($response->content());
     }
 }

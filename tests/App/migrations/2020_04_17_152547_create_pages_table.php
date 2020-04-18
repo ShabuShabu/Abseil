@@ -15,6 +15,7 @@ class CreatePagesTable extends Migration
         Schema::create('pages', static function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
+            $table->uuid('category_id')->index();
             $table->string('title');
             $table->text('content')->nullable();
             $table->timestamps();
@@ -22,6 +23,12 @@ class CreatePagesTable extends Migration
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });

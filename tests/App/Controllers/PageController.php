@@ -3,7 +3,8 @@
 namespace ShabuShabu\Abseil\Tests\App\Controllers;
 
 use Illuminate\Http\{Request, Response};
-use ShabuShabu\Abseil\Http\{Collection, Controller};
+use ShabuShabu\Abseil\Http\Controller;
+use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Tests\App\Page;
 use ShabuShabu\Abseil\Tests\App\Requests\PageRequest;
 

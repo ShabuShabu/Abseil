@@ -188,7 +188,7 @@ Staying with this example, the `Page::syncCategory` method could be as easy as t
 ```php
 public function syncCategory(Collection $category): bool
 {
-    $this->category_id = $category->get('id');
+    $this->category()->associate($category->get('id'));
 
     return $this->save();
 }

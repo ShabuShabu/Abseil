@@ -6,6 +6,7 @@ namespace ShabuShabu\Abseil\Tests\Support;
 use Illuminate\Routing\Router;
 use ShabuShabu\Abseil\AbseilServiceProvider;
 use ShabuShabu\Abseil\Tests\App\Controllers\{PageController, UserController};
+use ShabuShabu\Abseil\Tests\App\Providers\AppServiceProvider;
 
 trait AppSetup
 {
@@ -55,6 +56,9 @@ trait AppSetup
 
     protected function getEnvironmentSetUp($app): void
     {
+        $app['config']->set('abseil.resource_namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Resources\\');
+        $app['config']->set('abseil.morph_map_location', AppServiceProvider::class);
+
         $app['config']->set('database.default', 'abseil');
         $app['config']->set('database.connections.abseil', [
             'driver'   => 'sqlite',
@@ -65,6 +69,9 @@ trait AppSetup
 
     protected function getPackageProviders($app): array
     {
-        return [AbseilServiceProvider::class];
+        return [
+            AppServiceProvider::class,
+            AbseilServiceProvider::class,
+        ];
     }
 }

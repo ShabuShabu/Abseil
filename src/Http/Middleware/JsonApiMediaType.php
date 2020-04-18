@@ -18,8 +18,13 @@ class JsonApiMediaType
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->header('content-type') !== Resource::MEDIA_TYPE) {
-            throw new UnsupportedMediaTypeHttpException('An invalid content type header was set');
+        $contentType = $request->header('content-type');
+        $mediaType   = Resource::MEDIA_TYPE;
+
+        if ($contentType !== $mediaType) {
+            throw new UnsupportedMediaTypeHttpException(
+                "An invalid content type header was set [$contentType]. Expected [$mediaType]."
+            );
         }
 
         return $next($request);

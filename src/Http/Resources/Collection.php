@@ -1,6 +1,6 @@
 <?php
 
-namespace ShabuShabu\Abseil\Http;
+namespace ShabuShabu\Abseil\Http\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
@@ -45,7 +45,7 @@ class Collection extends ResourceCollection
         $includes = $this->resource->reduce(function (BaseCollection $collection, Resource $resource) {
             $includes = collect($resource->resource::ALLOWED_INCLUDES)
                 ->reduce(
-                    fn (BaseCollection $includes, string $relation) => $this->included(
+                    fn(BaseCollection $includes, string $relation) => $this->included(
                         $includes,
                         $relation,
                         $resource->resource

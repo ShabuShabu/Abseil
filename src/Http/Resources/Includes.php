@@ -1,6 +1,6 @@
 <?php
 
-namespace ShabuShabu\Abseil\Http;
+namespace ShabuShabu\Abseil\Http\Resources;
 
 use Illuminate\Http\Resources\MissingValue;
 use LogicException;

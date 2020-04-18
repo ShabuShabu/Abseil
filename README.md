@@ -19,7 +19,7 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 
 - Extract tests from original package
 - Publish to Packagist
-- Add a middleware to check for [valid headers](https://jsonapi.org/format/#content-negotiation-servers)
+- Add readme section about policies
 - Enjoy rock star status and live the good life
 
 ## Installation
@@ -95,7 +95,8 @@ use App\Http\Requests\PageRequest;
 use App\Http\Resources\Page as PageResponse;
 use App\Page;
 use Illuminate\Http\{Request, Response};
-use ShabuShabu\Abseil\Http\{Collection, Controller};
+use ShabuShabu\Abseil\Http\Resources\Collection;
+use ShabuShabu\Abseil\Http\Controller;
 
 class PageController extends Controller
 {
@@ -174,7 +175,7 @@ Here's an example request payload:
 Abseil will then call the following method so you can save the category as you see fit:
 
 ```php
-$page->syncCategory(collect([
+$result = $page->syncCategory(collect([
     'type' => 'categories',
     'id' => '9041eabb-932a-4d47-a767-6c799873354a'
 ]));
@@ -185,10 +186,11 @@ Abseil will throw an error if that method does not exist, so it's your responsib
 Staying with this example, the `Page::syncCategory` method could be as easy as the following:
 
 ```php
-public function syncCategory(Collection $category): void
+public function syncCategory(Collection $category): bool
 {
     $this->category_id = $category->get('id');
-    $this->save();
+
+    return $this->save();
 }
 ```
 
@@ -200,7 +202,7 @@ Note that we're only specifying the `data.attributes` here. Anything else, like 
 ```php
 namespace App\Http\Resources;
 
-use ShabuShabu\Abseil\Http\Resource; 
+use ShabuShabu\Abseil\Http\Resources\Resource; 
 
 class Page extends Resource
 {
@@ -270,7 +272,7 @@ That way, Abseil can automatically create the links section for you.
 
 ### Exceptions
 
-Abseil ships with a couple exceptions to transform errors into valid JSON:API format. To use them, just add the following to your exception handler:
+Abseil ships with a couple exceptions to transform errors into valid JSON:API format. To use them, just add something like the following to your exception handler:
 
 ```php
 public function render($request, Throwable $exception): Response
@@ -290,6 +292,13 @@ public function render($request, Throwable $exception): Response
     return parent::render($request, $exception);
 }
 ```
+
+### Middleware
+
+There's a middleware that you can use for all your JSON:API enabled routes. It's already registered for you and aliases to `json.api`.
+If using the class directly is more your cup of tea, you can find it here: `\ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType` 
+
+This middleware checks if the `Content-Type` header matches `application/vnd.api+json` and throws an `UnsupportedMediaTypeHttpException` if it doesn't.
 
 ## Testing
 

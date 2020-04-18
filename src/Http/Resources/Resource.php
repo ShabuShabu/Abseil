@@ -1,6 +1,6 @@
 <?php
 
-namespace ShabuShabu\Abseil\Http;
+namespace ShabuShabu\Abseil\Http\Resources;
 
 use Carbon\CarbonInterface;
 use Illuminate\Contracts\Support\Arrayable;

@@ -3,6 +3,7 @@
 namespace ShabuShabu\Abseil;
 
 use Illuminate\Support\{Collection, Facades\Route, ServiceProvider};
+use ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType;
 
 class AbseilServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,8 @@ class AbseilServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/abseil.php' => config_path('abseil.php'),
             ], 'config');
         }
+
+        $this->app['router']->aliasMiddleware('json.api', JsonApiMediaType::class);
 
         $this->mapRoutePatterns();
         $this->mapRouteParameters();
@@ -45,7 +48,7 @@ class AbseilServiceProvider extends ServiceProvider
     protected function boundResources(): Collection
     {
         return morph_map()->filter(
-            fn ($model, $key) => $model::ROUTE_PARAM === $key
+            fn($model, $key) => $model::ROUTE_PARAM === $key
         );
     }
 
@@ -71,7 +74,7 @@ class AbseilServiceProvider extends ServiceProvider
         foreach ($this->boundResources() as $param => $class) {
             Route::bind(
                 $param,
-                fn (string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
+                fn(string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }
     }

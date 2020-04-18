@@ -11,6 +11,7 @@ use Illuminate\Support\{Arr, Collection as BaseCollection, Str};
 use LogicException;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Trashable};
 use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelationshipSaved, ResourceUpdated};
+use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use function ShabuShabu\Abseil\{inflate, resource_guard};
@@ -48,6 +49,10 @@ class Controller extends BaseController
 
         if (! class_exists($collection = $resource . 'Collection')) {
             $collection = $namespace . 'Collection';
+        }
+
+        if (! class_exists($collection)) {
+            $collection = Collection::class;
         }
 
         resource_guard($collection);
@@ -215,12 +220,16 @@ class Controller extends BaseController
             throw_unless(
                 method_exists($model, $method),
                 LogicException::class,
-                sprintf('Method [%s] does not exist for model [%s]', $method, get_class($model))
+                sprintf(
+                    'Method [%s] does not exist for model [%s]',
+                    $method,
+                    get_class($model)
+                )
             );
 
-            $model->{$method}(collect($relationship['data']));
-
-            ResourceRelationshipSaved::dispatch($model, $relationship);
+            if ($model->{$method}(collect($relationship['data']))) {
+                ResourceRelationshipSaved::dispatch($model, $relationship);
+            }
         }
     }
 

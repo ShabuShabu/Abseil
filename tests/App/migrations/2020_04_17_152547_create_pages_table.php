@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePagesTable extends Migration
 {
@@ -41,6 +42,6 @@ class CreatePagesTable extends Migration
      */
     public function down(): void
     {
-        Schema::drop('pages');
+        Schema::dropIfExists('pages');
     }
 }

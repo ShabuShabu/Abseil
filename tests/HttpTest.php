@@ -15,7 +15,7 @@ class HttpTest extends TestCase
      * @test
      * @group fail
      */
-    public function ensure_true_is_true(): void
+    public function ensure_that_a_valid_json_api_collection_is_returned(): void
     {
         $this->actingAs($this->authenticatedUser);
 
@@ -24,13 +24,37 @@ class HttpTest extends TestCase
         $response = $this->getJson('pages');
 
         $response->assertStatus(Response::HTTP_OK)
-                 ->assertJsonStructure(
-                     $this->collectionStructure([
-                         'title',
-                         'content',
-                         'createdAt',
-                         'updatedAt',
-                     ])
-                 );
+                 ->assertJsonStructure([
+                     'data'  => [
+                         [
+                             'id',
+                             'type',
+                             'attributes' => [
+                                 'title',
+                                 'content',
+                                 'createdAt',
+                                 'updatedAt',
+                             ],
+                             'links',
+                         ],
+                     ],
+                     'links' => [
+                         'first',
+                         'last',
+                         'prev',
+                         'next',
+                     ],
+                     'meta'  => [
+                         'pagination' => [
+                             'currentPage',
+                             'lastPage',
+                             'from',
+                             'path',
+                             'perPage',
+                             'to',
+                             'total',
+                         ],
+                     ],
+                 ]);
     }
 }

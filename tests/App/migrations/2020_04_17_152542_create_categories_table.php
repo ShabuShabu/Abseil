@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCategoriesTable extends Migration
 {
@@ -26,6 +27,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down(): void
     {
-        Schema::drop('pages');
+        Schema::dropIfExists('categories');
     }
 }

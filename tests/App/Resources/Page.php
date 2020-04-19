@@ -2,7 +2,7 @@
 
 namespace ShabuShabu\Abseil\Tests\App\Resources;
 
-use ShabuShabu\Abseil\Http\Resource;
+use ShabuShabu\Abseil\Http\Resources\Resource;
 
 /**
  * @mixin \ShabuShabu\Abseil\Tests\App\Page

@@ -14,7 +14,7 @@ use ShabuShabu\Abseil\Events\{ResourceCreated, ResourceDeleted, ResourceRelation
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
-use function ShabuShabu\Abseil\{inflate, resource_guard};
+use function ShabuShabu\Abseil\{inflate, resource_guard, resource_namespace};
 
 class Controller extends BaseController
 {
@@ -43,7 +43,7 @@ class Controller extends BaseController
 
         $this->authorize('overview', $class);
 
-        $namespace = config('abseil.resource_namespace');
+        $namespace = resource_namespace();
 
         $resource = $namespace . class_basename($class);
 
@@ -122,8 +122,9 @@ class Controller extends BaseController
         $this->authorize('view', $model);
 
         resource_guard(
-            $resource = $resource ?: rtrim(config('abseil.resource_namespace'), '\\') . '\\' . class_basename($model)
+            $resource = $resource ?: resource_namespace() . class_basename($model)
         );
+
         $includes = QueryBuilderRequest::fromRequest($request)
                                        ->includes()
                                        ->intersect($model::ALLOWED_INCLUDES)

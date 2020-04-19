@@ -3,8 +3,10 @@
 namespace ShabuShabu\Abseil;
 
 use Illuminate\Database\Eloquent\{Builder, Model as Eloquent};
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Queryable};
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * ShabuShabu\Abseil\Model
@@ -48,6 +50,14 @@ abstract class Model extends Eloquent implements HeaderValues, Queryable
      * @var int
      */
     protected $perPage = 20;
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder
+    {
+        return $query->allowedIncludes(self::ALLOWED_INCLUDES);
+    }
 
     /**
      * {@inheritDoc}

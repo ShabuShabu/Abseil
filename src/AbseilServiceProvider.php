@@ -63,9 +63,9 @@ class AbseilServiceProvider extends ServiceProvider
             return;
         }
 
-        foreach ($this->uuidParams() as $param) {
-            Route::pattern($param, self::$uuidPattern);
-        }
+        $this->uuidParams()->each(
+            fn(string $param) => Route::pattern($param, self::$uuidPattern)
+        );
     }
 
     /**
@@ -74,8 +74,7 @@ class AbseilServiceProvider extends ServiceProvider
     protected function mapRouteParameters(): void
     {
         foreach ($this->boundResources() as $param => $class) {
-            Route::bind(
-                $param,
+            Route::bind($param,
                 fn(string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }

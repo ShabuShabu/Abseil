@@ -26,4 +26,7 @@
         <log type="coverage-text" target="coverage/coverage.txt"/>
         <log type="coverage-clover" target="coverage/logs/clover.xml"/>
     </logging>
+    <php>
+        <env name="DB_CONNECTION" value="testing"/>
+    </php>
 </phpunit>

@@ -13,6 +13,9 @@ trait AppSetup
 {
     protected ?User $authenticatedUser = null;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,6 +26,9 @@ trait AppSetup
         $this->authenticatedUser = factory(User::class)->create();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function getEnvironmentSetUp($app): void
     {
         $this->setupRouting($app['router']);
@@ -30,15 +36,11 @@ trait AppSetup
         $app['config']->set('abseil.policies.namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Policies');
         $app['config']->set('abseil.resource_namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Resources');
         $app['config']->set('abseil.morph_map_location', AppServiceProvider::class);
-
-        $app['config']->set('database.default', 'abseil');
-        $app['config']->set('database.connections.abseil', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
     }
 
+    /**
+     * @param \Illuminate\Routing\Router $router
+     */
     protected function setupRouting(Router $router): void
     {
         $routing = [
@@ -75,11 +77,70 @@ trait AppSetup
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function getPackageProviders($app): array
     {
         return [
             AppServiceProvider::class,
             AbseilServiceProvider::class,
+        ];
+    }
+
+    /**
+     * @param array $attributes
+     * @return array
+     */
+    protected function collectionStructure(array $attributes = []): array
+    {
+        return [
+            'data'  => [
+                $this->singleStructure($attributes, true),
+            ],
+            'links' => [
+                'first',
+                'last',
+                'prev',
+                'next',
+            ],
+            'meta'  => [
+                'pagination' => [
+                    'currentPage',
+                    'lastPage',
+                    'from',
+                    'path',
+                    'perPage',
+                    'to',
+                    'total',
+                ],
+            ],
+            'includes',
+        ];
+    }
+
+    /**
+     * @param array $attributes
+     * @param bool  $dataOnly
+     * @return array
+     */
+    protected function singleStructure(array $attributes, bool $dataOnly = false): array
+    {
+        $data = [
+            'id',
+            'type',
+            'attributes' => $attributes,
+            'links',
+            'relationships',
+        ];
+
+        if ($dataOnly) {
+            return $data;
+        }
+
+        return [
+            'data' => $data,
+            'includes',
         ];
     }
 }

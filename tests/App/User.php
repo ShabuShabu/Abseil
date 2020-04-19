@@ -9,11 +9,9 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\{Relations\HasMany, SoftDeletes};
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use ShabuShabu\Abseil\Contracts\Trashable;
 use ShabuShabu\Abseil\Model;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class User extends Model implements Trashable, AuthorizableContract, AuthenticatableContract, CanResetPasswordContract
 {
@@ -23,8 +21,11 @@ class User extends Model implements Trashable, AuthorizableContract, Authenticat
         Notifiable,
         SoftDeletes;
 
-    public const JSON_TYPE   = 'users';
-    public const ROUTE_PARAM = 'user';
+    public const JSON_TYPE        = 'users';
+    public const ROUTE_PARAM      = 'user';
+    public const ALLOWED_INCLUDES = [
+        'pages',
+    ];
 
     protected $fillable = [
         'name',
@@ -40,11 +41,6 @@ class User extends Model implements Trashable, AuthorizableContract, Authenticat
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder
-    {
-        return $query;
-    }
 
     public function pages(): HasMany
     {

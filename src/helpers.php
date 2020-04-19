@@ -24,6 +24,14 @@ function morph_map(): Collection
 }
 
 /**
+ * @return string
+ */
+function resource_namespace(): string
+{
+    return rtrim(config('abseil.resource_namespace'), '\\') . '\\';
+}
+
+/**
  * @return bool
  */
 function is_authenticated_request(): bool

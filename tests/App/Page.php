@@ -3,15 +3,17 @@
 namespace ShabuShabu\Abseil\Tests\App;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use ShabuShabu\Abseil\Model;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class Page extends Model
 {
-    public const JSON_TYPE   = 'pages';
-    public const ROUTE_PARAM = 'page';
+    public const JSON_TYPE        = 'pages';
+    public const ROUTE_PARAM      = 'page';
+    public const ALLOWED_INCLUDES = [
+        'user',
+        'category',
+    ];
 
     protected $table = 'pages';
 
@@ -19,11 +21,6 @@ class Page extends Model
         'title',
         'content',
     ];
-
-    public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder
-    {
-        return $query;
-    }
 
     public function user(): BelongsTo
     {

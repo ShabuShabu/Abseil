@@ -28,7 +28,7 @@ class RespondingTest extends TestCase
      * @param string $message
      * @param int    $status
      */
-    public function ensure_that_the_correct_response_are_returned(string $method, string $message, int $status): void
+    public function ensure_that_the_correct_responses_are_returned(string $method, string $message, int $status): void
     {
         $responder = new class() {
             use Responding;

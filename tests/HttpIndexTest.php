@@ -4,6 +4,7 @@ namespace ShabuShabu\Abseil\Tests;
 
 use Illuminate\Http\Response;
 use Orchestra\Testbench\TestCase;
+use ShabuShabu\Abseil\Http\Resources\Resource;
 use ShabuShabu\Abseil\Tests\App\{Category, Page, User};
 use ShabuShabu\Abseil\Tests\Support\AppSetup;
 
@@ -20,7 +21,9 @@ class HttpIndexTest extends TestCase
 
         factory(Page::class, 2)->states('withCategory', 'withUser')->create();
 
-        $response = $this->getJson('pages');
+        $response = $this->getJson('pages', [
+            'Accept' => Resource::MEDIA_TYPE,
+        ]);
 
         $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonStructure([
@@ -70,7 +73,9 @@ class HttpIndexTest extends TestCase
 
         $page = factory(Page::class)->states('withCategory', 'withUser')->create();
 
-        $response = $this->getJson('pages?include=user,category');
+        $response = $this->getJson('pages?include=user,category', [
+            'Accept' => Resource::MEDIA_TYPE,
+        ]);
 
         $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonStructure([

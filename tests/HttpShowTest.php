@@ -4,6 +4,7 @@ namespace ShabuShabu\Abseil\Tests;
 
 use Illuminate\Http\Response;
 use Orchestra\Testbench\TestCase;
+use ShabuShabu\Abseil\Http\Resources\Resource;
 use ShabuShabu\Abseil\Tests\App\{Category, Page, User};
 use ShabuShabu\Abseil\Tests\Support\AppSetup;
 
@@ -12,8 +13,6 @@ class HttpShowTest extends TestCase
     use AppSetup;
 
     /**
-     * Route model binding does not seem to work
-     *
      * @test
      */
     public function ensure_that_a_valid_json_api_resource_is_returned(): void
@@ -22,7 +21,9 @@ class HttpShowTest extends TestCase
 
         $page = factory(Page::class)->states('withCategory', 'withUser')->create();
 
-        $response = $this->getJson('pages/' . $page->id);
+        $response = $this->getJson('pages/' . $page->id, [
+            'Accept' => Resource::MEDIA_TYPE,
+        ]);
 
         $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonStructure([
@@ -45,15 +46,16 @@ class HttpShowTest extends TestCase
 
     /**
      * @test
-     * @group fail
      */
-    public function ensure_that_a_valid_json_api_collection_is_returned_including_relationships(): void
+    public function ensure_that_a_valid_json_api_resource_is_returned_including_relationships(): void
     {
         $this->actingAs($this->authenticatedUser);
 
         $page = factory(Page::class)->states('withCategory', 'withUser')->create();
 
-        $response = $this->getJson('pages/' . $page->id . '?include=user,category');
+        $response = $this->getJson('pages/' . $page->id . '?include=user,category', [
+            'Accept' => Resource::MEDIA_TYPE,
+        ]);
 
         $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonStructure([

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException as BaseException;
 use ShabuShabu\Abseil\ApiError;
-use ShabuShabu\Abseil\Http\Resource;
+use ShabuShabu\Abseil\Http\Resources\Resource;
 use Symfony\Component\HttpFoundation\Response;
 use function ShabuShabu\Abseil\to_camel_case;
 

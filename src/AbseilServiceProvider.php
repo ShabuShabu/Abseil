@@ -21,7 +21,7 @@ class AbseilServiceProvider extends ServiceProvider
             ], 'config');
         }
 
-        $this->app['router']->aliasMiddleware('json.api', JsonApiMediaType::class);
+        $this->app['router']->aliasMiddleware('media.type', JsonApiMediaType::class);
 
         $this->guessPolicies();
         $this->mapRoutePatterns();

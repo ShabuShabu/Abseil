@@ -18,9 +18,20 @@ class Page extends Model
     protected $table = 'pages';
 
     protected $fillable = [
+        'id',
         'title',
         'content',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(static function (Model $model) {
+            if (! $model->user_id) {
+                $model->user_id = auth()->id();
+            }
+        });
+    }
+
 
     public function user(): BelongsTo
     {

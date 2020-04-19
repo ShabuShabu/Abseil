@@ -210,7 +210,7 @@ class Controller extends BaseController
      */
     protected function saveRelationships(Request $request, Model $model): void
     {
-        $relationships = collect($request->validated())->get('relationships', []);
+        $relationships = collect($request->validated()['data'])->get('relationships', []);
 
         foreach ($relationships as $name => $relationship) {
             $method = 'sync' . Str::kebab($name);
@@ -240,10 +240,7 @@ class Controller extends BaseController
      */
     protected function modelFieldsFrom(Request $request, bool $asArray = true): iterable
     {
-        $data = Arr::only(
-            $request->validated()['data'],
-            ['id', 'attributes', 'relationships']
-        );
+        $data = Arr::only($request->validated()['data'], ['id', 'attributes']);
 
         return collect(Arr::dot($data))
             ->mapWithKeys(

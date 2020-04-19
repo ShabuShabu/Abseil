@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use ShabuShabu\Abseil\ApiError;
-use ShabuShabu\Abseil\Http\Resource;
+use ShabuShabu\Abseil\Http\Resources\Resource;
 use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
 use Spatie\QueryBuilder\Exceptions\InvalidQuery;
 

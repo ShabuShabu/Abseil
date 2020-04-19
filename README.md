@@ -294,7 +294,8 @@ public function render($request, Throwable $exception): Response
 
 ### Middleware
 
-There's a middleware that you can use for all your JSON:API enabled routes. It's already registered for you and aliases to `json.api`.
+There's a middleware that you can use for your JSON:API enabled routes. It's already registered for you and aliased to `media.type`.
+It accepts an optional parameter for the header name. The default is `conrtent-type`, but can also be used for `accept`.
 If using the class directly is more your cup of tea, you can find it here: `\ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType` 
 
 This middleware checks if the `Content-Type` header matches `application/vnd.api+json` and throws an `UnsupportedMediaTypeHttpException` if it doesn't.
@@ -307,7 +308,7 @@ This functionality can be completely disabled.
 
 ## Testing
 
-Abseil has been extracted from a [personal project](https://boris.travelled.today). It is fully unit tested, but the tests are still intermingled with original project tests and will make their way into this repository in due course. 
+Abseil actually comes with a tiny and fairly useless test app. Have a look at it to see how all the pieces come together!
 
 ```
 $ composer test

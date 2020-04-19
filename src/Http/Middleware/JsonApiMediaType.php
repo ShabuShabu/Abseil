@@ -14,16 +14,17 @@ class JsonApiMediaType
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
+     * @param string                   $headerName
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, string $headerName = 'content-type')
     {
-        $contentType = $request->header('content-type');
-        $mediaType   = Resource::MEDIA_TYPE;
+        $header    = $request->header($headerName);
+        $mediaType = Resource::MEDIA_TYPE;
 
-        if ($contentType !== $mediaType) {
+        if ($header !== $mediaType) {
             throw new UnsupportedMediaTypeHttpException(
-                "An invalid content type header was set [$contentType]. Expected [$mediaType]."
+                "An invalid $headerName header was set [$header]. Expected [$mediaType]."
             );
         }
 

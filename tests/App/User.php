@@ -24,6 +24,7 @@ class User extends Model implements Trashable, AuthorizableContract, Authenticat
     public const JSON_TYPE        = 'users';
     public const ROUTE_PARAM      = 'user';
     public const ALLOWED_INCLUDES = [
+        'id',
         'pages',
     ];
 

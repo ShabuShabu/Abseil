@@ -157,7 +157,7 @@ class Resource extends JsonResource
     {
         $routeName = $this->resource::JSON_TYPE . '.relationship.' . $relation;
 
-        return $this->when(Route::has($routeName), route($routeName, [
+        return $this->when(Route::has($routeName), fn() => route($routeName, [
             $this->resource::ROUTE_PARAM => $this->resource->id,
         ]));
     }

@@ -4,13 +4,14 @@ namespace ShabuShabu\Abseil\Tests\App\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use ShabuShabu\Abseil\Tests\App\{Page, User};
+use ShabuShabu\Abseil\Tests\App\{Category, Page, User};
 
 class AppServiceProvider extends ServiceProvider
 {
     public const MORPH_MAP = [
-        'page' => Page::class,
-        'user' => User::class,
+        'category' => Category::class,
+        'page'     => Page::class,
+        'user'     => User::class,
     ];
 
     public function boot(): void

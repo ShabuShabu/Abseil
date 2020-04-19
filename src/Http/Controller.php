@@ -43,9 +43,7 @@ class Controller extends BaseController
 
         $this->authorize('overview', $class);
 
-        $namespace = resource_namespace();
-
-        $resource = $namespace . class_basename($class);
+        $resource = ($namespace = resource_namespace()) . class_basename($class);
 
         if (! class_exists($collection = $resource . 'Collection')) {
             $collection = $namespace . 'Collection';

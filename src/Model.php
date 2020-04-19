@@ -56,7 +56,7 @@ abstract class Model extends Eloquent implements HeaderValues, Queryable
      */
     public static function modifyPagedQuery(QueryBuilder $query, Request $request): QueryBuilder
     {
-        return $query->allowedIncludes(self::ALLOWED_INCLUDES);
+        return $query->allowedIncludes(static::ALLOWED_INCLUDES);
     }
 
     /**
@@ -64,6 +64,6 @@ abstract class Model extends Eloquent implements HeaderValues, Queryable
      */
     public function url(): string
     {
-        return route(static::JSON_TYPE . '.show', [static::ROUTE_PARAM => $this->id]);
+        return route(static::JSON_TYPE . '.show', [static::ROUTE_PARAM => $this->getKey()]);
     }
 }

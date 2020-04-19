@@ -7,6 +7,7 @@ use ShabuShabu\Abseil\Http\Controller;
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Tests\App\Category;
 use ShabuShabu\Abseil\Tests\App\Requests\CategoryRequest;
+use ShabuShabu\Abseil\Tests\App\Resources\Category as CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -20,7 +21,7 @@ class CategoryController extends Controller
         return $this->createResource($request, Category::class);
     }
 
-    public function show(Request $request, Category $category): PageResponse
+    public function show(Request $request, Category $category): CategoryResource
     {
         return $this->showResource($request, $category);
     }

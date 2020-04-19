@@ -2,8 +2,8 @@
 
 namespace ShabuShabu\Abseil;
 
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\{Collection, ServiceProvider};
-use Illuminate\Support\Facades\{Gate, Route};
 use ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType;
 
 class AbseilServiceProvider extends ServiceProvider
@@ -64,7 +64,7 @@ class AbseilServiceProvider extends ServiceProvider
         }
 
         $this->uuidParams()->each(
-            fn(string $param) => Route::pattern($param, self::$uuidPattern)
+            fn(string $param) => $this->app['router']->pattern($param, self::$uuidPattern)
         );
     }
 
@@ -74,8 +74,8 @@ class AbseilServiceProvider extends ServiceProvider
     protected function mapRouteParameters(): void
     {
         foreach ($this->boundResources() as $param => $class) {
-            Route::bind($param,
-                fn(string $uuid) => ModelQuery::make($class::query(), request())->find($uuid)
+            $this->app['router']->bind($param,
+                fn($uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }
     }
@@ -91,7 +91,7 @@ class AbseilServiceProvider extends ServiceProvider
             return;
         }
 
-        Gate::guessPolicyNamesUsing(
+        $this->app[Gate::class]->guessPolicyNamesUsing(
             static fn(string $className) => get_first_resource($config['namespace'], $className, $config['suffix'])
         );
     }

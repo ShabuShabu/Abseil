@@ -5,9 +5,10 @@ namespace ShabuShabu\Abseil\Tests\Support;
 
 use Illuminate\Routing\Router;
 use ShabuShabu\Abseil\AbseilServiceProvider;
+use ShabuShabu\Abseil\Tests\App\{Category, Page, User};
 use ShabuShabu\Abseil\Tests\App\Controllers\{CategoryController, PageController, UserController};
 use ShabuShabu\Abseil\Tests\App\Providers\AppServiceProvider;
-use ShabuShabu\Abseil\Tests\App\User;
+use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
 trait AppSetup
 {
@@ -43,38 +44,45 @@ trait AppSetup
      */
     protected function setupRouting(Router $router): void
     {
-        $routing = [
-            [PageController::class, 'pages', 'page', false],
-            [CategoryController::class, 'categories', 'category', false],
-            [UserController::class, 'users', 'user', true],
+        $middleware = [
+            'bindings',
+            'json.api',
         ];
 
-        foreach ($routing as $config) {
-            [$controller, $uri, $param, $canRestore] = $config;
+        $router->middleware($middleware)->group(static function (Router $router) {
+            $routing = [
+                [PageController::class, Page::JSON_TYPE, Page::ROUTE_PARAM, false],
+                [CategoryController::class, Category::JSON_TYPE, Category::ROUTE_PARAM, false],
+                [UserController::class, User::JSON_TYPE, User::ROUTE_PARAM, true],
+            ];
 
-            $router->get($uri, [$controller, 'index'])
-                   ->name($uri . '.index');
+            foreach ($routing as $config) {
+                [$controller, $uri, $param, $canRestore] = $config;
 
-            $router->post($uri, [$controller, 'store'])
-                   ->name($uri . '.store');
+                $router->get($uri, [$controller, 'index'])
+                       ->name($uri . '.index');
 
-            $router->get($uri . '/{' . $param . '}', [$controller, 'show'])
-                   ->name($uri . '.show');
+                $router->post($uri, [$controller, 'store'])
+                       ->name($uri . '.store');
 
-            $router->put($uri . '/{' . $param . '}', [$controller, 'update'])
-                   ->name($uri . '.update');
+                $router->get($uri . '/{' . $param . '}', [$controller, 'show'])
+                       ->name($uri . '.show');
 
-            $router->patch($uri . '/{' . $param . '}', [$controller, 'update'])
-                   ->name($uri . '.patch');
+                $router->put($uri . '/{' . $param . '}', [$controller, 'update'])
+                       ->name($uri . '.update');
 
-            $router->delete($uri . '/{' . $param . '}', [$controller, 'destroy'])
-                   ->name($uri . '.destroy');
+                $router->patch($uri . '/{' . $param . '}', [$controller, 'update'])
+                       ->name($uri . '.patch');
 
-            if ($canRestore) {
-                $router->put($uri . '/{' . $param . '}/restore', [$controller, 'restore'])
-                       ->name($uri . '.restore');
+                $router->delete($uri . '/{' . $param . '}', [$controller, 'destroy'])
+                       ->name($uri . '.destroy');
+
+                if ($canRestore) {
+                    $router->put($uri . '/{' . $param . '}/restore', [$controller, 'restore'])
+                           ->name($uri . '.restore');
+                }
             }
-        }
+        });
     }
 
     /**
@@ -84,6 +92,7 @@ trait AppSetup
     {
         return [
             AppServiceProvider::class,
+            QueryBuilderServiceProvider::class,
             AbseilServiceProvider::class,
         ];
     }

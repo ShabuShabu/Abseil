@@ -6,6 +6,7 @@ use Illuminate\Http\{Request, Response};
 use ShabuShabu\Abseil\Http\Controller;
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Tests\App\Requests\UserRequest;
+use ShabuShabu\Abseil\Tests\App\Resources\User as UserResource;
 use ShabuShabu\Abseil\Tests\App\User;
 
 class UserController extends Controller
@@ -20,7 +21,7 @@ class UserController extends Controller
         return $this->createResource($request, User::class);
     }
 
-    public function show(Request $request, User $user): UserResponse
+    public function show(Request $request, User $user): UserResource
     {
         return $this->showResource($request, $user);
     }

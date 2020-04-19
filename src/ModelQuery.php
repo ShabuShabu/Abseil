@@ -33,10 +33,10 @@ class ModelQuery
     }
 
     /**
-     * @param string $uuid
+     * @param string|int $uuid
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function find(string $uuid)
+    public function find($uuid)
     {
         return $this->query
             ->allowedFilters($this->allowedFilters())

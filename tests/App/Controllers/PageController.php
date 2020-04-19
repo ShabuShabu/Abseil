@@ -7,6 +7,7 @@ use ShabuShabu\Abseil\Http\Controller;
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Tests\App\Page;
 use ShabuShabu\Abseil\Tests\App\Requests\PageRequest;
+use ShabuShabu\Abseil\Tests\App\Resources\Page as PageResource;
 
 class PageController extends Controller
 {
@@ -20,7 +21,7 @@ class PageController extends Controller
         return $this->createResource($request, Page::class);
     }
 
-    public function show(Request $request, Page $page): PageResponse
+    public function show(Request $request, Page $page): PageResource
     {
         return $this->showResource($request, $page);
     }

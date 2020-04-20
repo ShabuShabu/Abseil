@@ -21,16 +21,16 @@ class UserPolicy
 
     public function update(User $loggedInUser, User $user): bool
     {
-        return $user->is_admin || $loggedInUser->id === $user->id;
+        return $loggedInUser->is_admin || $loggedInUser->id === $user->id;
     }
 
     public function view(User $loggedInUser, User $user): bool
     {
-        return $user->is_admin || $loggedInUser->id === $user->id;
+        return $loggedInUser->is_admin || $loggedInUser->id === $user->id;
     }
 
     public function delete(User $loggedInUser, User $user): bool
     {
-        return $user->is_admin || $loggedInUser->id === $user->id;
+        return $loggedInUser->is_admin || $loggedInUser->id === $user->id;
     }
 }

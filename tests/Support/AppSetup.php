@@ -39,6 +39,7 @@ trait AppSetup
         $app['config']->set('abseil.policies.namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Policies');
         $app['config']->set('abseil.resource_namespace', 'ShabuShabu\\Abseil\\Tests\\App\\Resources');
         $app['config']->set('abseil.morph_map_location', AppServiceProvider::class);
+        $app['config']->set('abseil.auth_middleware', 'auth');
 
         $app->instance(ExceptionHandler::class, new Handler($app));
     }
@@ -48,43 +49,43 @@ trait AppSetup
      */
     protected function setupRouting(Router $router): void
     {
-        $middleware = ['bindings'];
-
-        $router->middleware($middleware)->group(static function(Router $router) {
+        $router->middleware(['bindings'])->group(static function(Router $router) {
             $routing = [
-                [PageController::class, Page::JSON_TYPE, Page::ROUTE_PARAM, false],
-                [CategoryController::class, Category::JSON_TYPE, Category::ROUTE_PARAM, false],
-                [UserController::class, User::JSON_TYPE, User::ROUTE_PARAM, true],
+                [PageController::class, Page::JSON_TYPE, Page::ROUTE_PARAM, false, []],
+                [CategoryController::class, Category::JSON_TYPE, Category::ROUTE_PARAM, false, []],
+                [UserController::class, User::JSON_TYPE, User::ROUTE_PARAM, true, ['auth']],
             ];
 
             foreach ($routing as $config) {
-                [$controller, $uri, $param, $canRestore] = $config;
+                [$controller, $uri, $param, $canRestore, $middleware] = $config;
 
                 $router->get($uri, [$controller, 'index'])
-                       ->middleware('media.type:accept')
+                       ->middleware('media.type:accept', ...$middleware)
                        ->name($uri . '.index');
 
                 $router->post($uri, [$controller, 'store'])
-                       ->middleware('media.type')
+                       ->middleware('media.type', ...$middleware)
                        ->name($uri . '.store');
 
                 $router->get($uri . '/{' . $param . '}', [$controller, 'show'])
-                       ->middleware('media.type:accept')
+                       ->middleware('media.type:accept', ...$middleware)
                        ->name($uri . '.show');
 
                 $router->put($uri . '/{' . $param . '}', [$controller, 'update'])
-                       ->middleware('media.type')
+                       ->middleware('media.type', ...$middleware)
                        ->name($uri . '.update');
 
                 $router->patch($uri . '/{' . $param . '}', [$controller, 'update'])
-                       ->middleware('media.type')
+                       ->middleware('media.type', ...$middleware)
                        ->name($uri . '.patch');
 
                 $router->delete($uri . '/{' . $param . '}', [$controller, 'destroy'])
+                       ->middleware($middleware)
                        ->name($uri . '.destroy');
 
                 if ($canRestore) {
                     $router->put($uri . '/{' . $param . '}/restore', [$controller, 'restore'])
+                           ->middleware($middleware)
                            ->name($uri . '.restore');
                 }
             }

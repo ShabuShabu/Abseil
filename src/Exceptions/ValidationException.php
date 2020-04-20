@@ -5,7 +5,7 @@ namespace ShabuShabu\Abseil\Exceptions;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException as BaseException;
-use ShabuShabu\Abseil\ApiError;
+use ShabuShabu\Abseil\Error;
 use ShabuShabu\Abseil\Http\Resources\Resource;
 use Symfony\Component\HttpFoundation\Response;
 use function ShabuShabu\Abseil\to_camel_case;
@@ -31,7 +31,7 @@ class ValidationException extends BaseException implements Responsable
         foreach ($this->errors() as $key => $messages) {
             foreach ($messages as $message) {
                 $errors = $errors->push(
-                    ApiError::make(Response::HTTP_UNPROCESSABLE_ENTITY, $message)->pointer($request, $key)
+                    Error::make(Response::HTTP_UNPROCESSABLE_ENTITY, $message)->pointer($request, $key)
                 );
             }
         }

@@ -5,7 +5,7 @@ namespace ShabuShabu\Abseil\Exceptions;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
-use ShabuShabu\Abseil\ApiError;
+use ShabuShabu\Abseil\Error;
 use ShabuShabu\Abseil\Http\Resources\Resource;
 use Spatie\QueryBuilder\Exceptions\InvalidFieldQuery;
 use Spatie\QueryBuilder\Exceptions\InvalidQuery;
@@ -58,7 +58,7 @@ class InvalidQueryException extends Exception implements Responsable
     {
         return response()->json([
             'errors' => [
-                ApiError::make(
+                Error::make(
                     $this->getCode(),
                     $this->getPrevious()->getMessage(),
                     $this->getMessage()

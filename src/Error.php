@@ -5,7 +5,7 @@ namespace ShabuShabu\Abseil;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 
-class ApiError implements Arrayable
+class Error implements Arrayable
 {
     protected ?Request $request;
 
@@ -33,9 +33,9 @@ class ApiError implements Arrayable
      * @param int         $status
      * @param string      $message
      * @param string|null $title
-     * @return ApiError
+     * @return Error
      */
-    public static function make(int $status, string $message, ?string $title = null): ApiError
+    public static function make(int $status, string $message, ?string $title = null): Error
     {
         return new static($status, $message, $title);
     }

@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="" src="https://github.com/boris-glumpler/Abseil/blob/develop/abseil.png"/>
+    <img alt="" src="https://github.com/ShabuShabu/Abseil/blob/develop/abseil.png"/>
 </p>
 
 <h1 align="center">Abseil</h1>

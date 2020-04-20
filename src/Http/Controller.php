@@ -154,7 +154,7 @@ class Controller extends BaseController
 
         $this->saveRelationships($request, $model);
 
-        ResourceUpdated::dispatch($response);
+        ResourceUpdated::dispatch($model);
 
         return $this->noContent();
     }

@@ -2,8 +2,8 @@
 
 namespace ShabuShabu\Abseil\Tests\App\Requests;
 
-use ShabuShabu\Harness\Request;
 use function ShabuShabu\Harness\r;
+use ShabuShabu\Harness\Request;
 
 class CategoryRequest extends Request
 {

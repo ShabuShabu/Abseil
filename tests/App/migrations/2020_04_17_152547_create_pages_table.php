@@ -13,7 +13,7 @@ class CreatePagesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', static function (Blueprint $table) {
+        Schema::create('pages', static function(Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->uuid('category_id')->nullable();

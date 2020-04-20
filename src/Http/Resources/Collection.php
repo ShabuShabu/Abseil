@@ -42,7 +42,7 @@ class Collection extends ResourceCollection
     protected function includes()
     {
         /** @var BaseCollection $includes */
-        $includes = $this->resource->reduce(function (BaseCollection $collection, Resource $resource) {
+        $includes = $this->resource->reduce(function(BaseCollection $collection, Resource $resource) {
             $includes = collect($resource->resource::ALLOWED_INCLUDES)
                 ->reduce(
                     fn(BaseCollection $includes, string $relation) => $this->included(
@@ -72,7 +72,7 @@ class Collection extends ResourceCollection
      */
     protected function included(BaseCollection $includes, string $relation, Model $model): BaseCollection
     {
-        $included = $this->isLoaded($model, $relation, function () use ($relation, $model) {
+        $included = $this->isLoaded($model, $relation, function() use ($relation, $model) {
             $resource = $this->resourceClass($model->{$relation});
 
             return new $resource($model->{$relation});

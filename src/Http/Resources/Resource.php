@@ -7,8 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\{Collection};
 use stdClass;
 
 /**
@@ -112,7 +112,7 @@ class Resource extends JsonResource
      */
     protected function included(Collection $includes, string $relation): Collection
     {
-        $included = $this->whenLoaded($relation, function () use ($relation) {
+        $included = $this->whenLoaded($relation, function() use ($relation) {
             $related = $this->resource->{$relation};
 
             $resource = $this->resourceClass($related);

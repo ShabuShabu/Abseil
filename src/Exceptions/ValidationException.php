@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException as BaseException;
 use ShabuShabu\Abseil\Error;
 use ShabuShabu\Abseil\Http\Resources\Resource;
-use Symfony\Component\HttpFoundation\Response;
 use function ShabuShabu\Abseil\to_camel_case;
+use Symfony\Component\HttpFoundation\Response;
 
 class ValidationException extends BaseException implements Responsable
 {

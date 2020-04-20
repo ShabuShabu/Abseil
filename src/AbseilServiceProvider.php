@@ -74,7 +74,8 @@ class AbseilServiceProvider extends ServiceProvider
     protected function mapRouteParameters(): void
     {
         foreach ($this->boundResources() as $param => $class) {
-            $this->app['router']->bind($param,
+            $this->app['router']->bind(
+                $param,
                 fn($uuid) => ModelQuery::make($class::query(), request())->find($uuid)
             );
         }

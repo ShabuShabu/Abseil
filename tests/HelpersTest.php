@@ -53,6 +53,7 @@ class HelpersTest extends TestCase
             resource_guard(AbseilServiceProvider::class);
         } catch (InvalidArgumentException $e) {
             $this->assertTrue(false);
+
             return;
         }
 

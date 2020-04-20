@@ -17,9 +17,9 @@ use ShabuShabu\Abseil\Events\{ResourceCreated,
     ResourceUpdated
 };
 use ShabuShabu\Abseil\Http\Resources\Collection;
+use function ShabuShabu\Abseil\{inflate, resource_guard, resource_namespace};
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
-use function ShabuShabu\Abseil\{inflate, resource_guard, resource_namespace};
 
 class Controller extends BaseController
 {

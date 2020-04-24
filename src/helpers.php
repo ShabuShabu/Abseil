@@ -14,7 +14,7 @@ use LogicException;
 function morph_map(): Collection
 {
     $location = config('abseil.morph_map_location');
-    $morphMap = $location . '::MORPH_MAP';
+    $morphMap = "$location::MORPH_MAP";
 
     if (! defined($morphMap)) {
         throw new InvalidArgumentException("Constant [$morphMap] was not found");

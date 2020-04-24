@@ -138,6 +138,7 @@ Abseil throws a number of events that you can hook into. Here's a full list:
 - **ResourceCreated**
 - **ResourceUpdated**
 - **ResourceDeleted**
+- **ResourceRestored**
 - **ResourceRelationshipSaved**
 
 The names are kinda self-explanatory. The payload for each event is always the model in question.

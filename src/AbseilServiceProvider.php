@@ -50,7 +50,7 @@ class AbseilServiceProvider extends ServiceProvider
     protected function boundResources(): Collection
     {
         return morph_map()->filter(
-            fn($model, $key) => $model::ROUTE_PARAM === $key
+            fn($model, $key) => defined("$model::ROUTE_PARAM") && $model::ROUTE_PARAM === $key
         );
     }
 

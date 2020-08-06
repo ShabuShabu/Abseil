@@ -4,11 +4,11 @@ namespace ShabuShabu\Abseil\Http\Resources;
 
 use Carbon\CarbonInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
+use Illuminate\Support\{Collection, Enumerable};
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\{Collection};
+use ShabuShabu\Abseil\Model;
 use stdClass;
 
 /**
@@ -31,13 +31,22 @@ class Resource extends JsonResource
     {
         return [
             'id'            => (string)$this->resource->id,
-            'type'          => $this->resource::JSON_TYPE,
+            'type'          => $this->config('jsonType'),
             'attributes'    => $this->resourceAttributes($request),
             'links'         => [
                 'self' => $this->resource->url(),
             ],
             'relationships' => $this->relationships(),
         ];
+    }
+
+    /**
+     * @param string $method
+     * @return mixed
+     */
+    protected function config(string $method)
+    {
+        return call_user_func([get_class($this->resource), $method]);
     }
 
     /**
@@ -93,7 +102,7 @@ class Resource extends JsonResource
      */
     protected function includes()
     {
-        /** @var Collection $includes */
+        /** @var Enumerable $includes */
         $includes = $this->allowedIncludes()->reduce(
             fn(Collection $includes, string $relation) => $this->included($includes, $relation),
             collect()
@@ -106,13 +115,13 @@ class Resource extends JsonResource
     }
 
     /**
-     * @param \Illuminate\Support\Collection $includes
+     * @param \Illuminate\Support\Enumerable $includes
      * @param string                         $relation
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Enumerable
      */
-    protected function included(Collection $includes, string $relation): Collection
+    protected function included(Enumerable $includes, string $relation): Enumerable
     {
-        $included = $this->whenLoaded($relation, function() use ($relation) {
+        $included = $this->whenLoaded($relation, function () use ($relation) {
             $related = $this->resource->{$relation};
 
             $resource = $this->resourceClass($related);
@@ -139,10 +148,10 @@ class Resource extends JsonResource
     }
 
     /**
-     * @param \Illuminate\Support\Collection $collection
+     * @param \Illuminate\Support\Enumerable $collection
      * @return bool
      */
-    protected function isEmpty(Collection $collection): bool
+    protected function isEmpty(Enumerable $collection): bool
     {
         return $collection
             ->filter(fn($item) => ! $item instanceof MissingValue)
@@ -155,34 +164,34 @@ class Resource extends JsonResource
      */
     protected function route(string $relation)
     {
-        $routeName = $this->resource::JSON_TYPE . '.relationship.' . $relation;
+        $routeName = $this->config('jsonType') . '.relationship.' . $relation;
 
         return $this->when(Route::has($routeName), fn() => route($routeName, [
-            $this->resource::ROUTE_PARAM => $this->resource->id,
+            $this->config('routeParam') => $this->resource->id,
         ]));
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
      * @return array
      */
     protected function rel(Model $model): array
     {
         return [
-            'type' => (string)$model::JSON_TYPE,
-            'id'   => (string)$model->id,
+            'type' => $model::jsonType(),
+            'id'   => (string)$model->getKey(),
         ];
     }
 
     /**
      * @param string $relation
-     * @return array|\Illuminate\Support\Collection
+     * @return array|\Illuminate\Support\Enumerable
      */
     protected function relationshipData(string $relation)
     {
         $relation = $this->resource->{$relation};
 
-        return $relation instanceof Collection ?
+        return $relation instanceof Enumerable ?
             $relation->map(fn($model) => $this->rel($model)) :
             $this->rel($relation);
     }
@@ -210,10 +219,10 @@ class Resource extends JsonResource
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Enumerable
      */
-    protected function allowedIncludes(): Collection
+    protected function allowedIncludes(): Enumerable
     {
-        return collect($this->resource::ALLOWED_INCLUDES);
+        return collect($this->config('allowedIncludes'));
     }
 }

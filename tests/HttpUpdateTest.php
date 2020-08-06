@@ -31,7 +31,7 @@ class HttpUpdateTest extends TestCase
         $response = $this->putJson('pages/' . $page->id, [
             'data' => [
                 'id'         => $page->id,
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title'   => 'About Us',
                     'content' => 'We are cool',
@@ -71,7 +71,7 @@ class HttpUpdateTest extends TestCase
         $response = $this->putJson('pages/' . $page->id, [
             'data' => [
                 'id'            => $page->id,
-                'type'          => Page::JSON_TYPE,
+                'type'          => Page::jsonType(),
                 'attributes'    => [
                     'title'   => 'About Us',
                     'content' => 'We are cool',
@@ -79,7 +79,7 @@ class HttpUpdateTest extends TestCase
                 'relationships' => [
                     'category' => [
                         'data' => [
-                            'type' => Category::JSON_TYPE,
+                            'type' => Category::jsonType(),
                             'id'   => $category->id,
                         ],
                     ],
@@ -118,7 +118,7 @@ class HttpUpdateTest extends TestCase
         $response = $this->putJson('pages/' . $page->id, [
             'data' => [
                 'id'         => $page->id,
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title'   => 1,
                     'content' => 'We are cool',

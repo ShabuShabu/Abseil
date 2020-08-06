@@ -133,12 +133,12 @@ class HttpIndexTest extends TestCase
         $this->assertContains($page->category->id, $ids);
 
         $this->assertEquals($page->id, $response->json('data.0.id'));
-        $this->assertEquals(Page::JSON_TYPE, $response->json('data.0.type'));
+        $this->assertEquals(Page::jsonType(), $response->json('data.0.type'));
 
         $this->assertEquals($page->user->id, $response->json('data.0.relationships.user.data.id'));
-        $this->assertEquals(User::JSON_TYPE, $response->json('data.0.relationships.user.data.type'));
+        $this->assertEquals(User::jsonType(), $response->json('data.0.relationships.user.data.type'));
 
         $this->assertEquals($page->category->id, $response->json('data.0.relationships.category.data.id'));
-        $this->assertEquals(Category::JSON_TYPE, $response->json('data.0.relationships.category.data.type'));
+        $this->assertEquals(Category::jsonType(), $response->json('data.0.relationships.category.data.type'));
     }
 }

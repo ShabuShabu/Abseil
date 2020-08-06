@@ -3,19 +3,6 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | UUIDs
-    |--------------------------------------------------------------------------
-    |
-    | By default Abseil assumes that all your models use UUIDs as primary
-    | keys. Firstly, because they're awesome, and secondly, because they
-    | work really well with JSON:API
-    |
-    */
-
-    'use_uuids' => true,
-
-    /*
-    |--------------------------------------------------------------------------
     | Auth Middleware
     |--------------------------------------------------------------------------
     |

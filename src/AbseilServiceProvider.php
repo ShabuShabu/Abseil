@@ -3,7 +3,7 @@
 namespace ShabuShabu\Abseil;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Support\{Collection, ServiceProvider};
+use Illuminate\Support\{Enumerable, ServiceProvider};
 use ShabuShabu\Abseil\Http\Middleware\JsonApiMediaType;
 
 class AbseilServiceProvider extends ServiceProvider
@@ -37,20 +37,22 @@ class AbseilServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return Collection
+     * @return Enumerable
      */
-    protected function uuidParams(): Collection
+    protected function uuidParams(): Enumerable
     {
-        return $this->boundResources()->keys();
+        return $this->boundResources()->filter(
+            fn($model, $key) => property_exists($model, 'useUuidPattern') && $model::$useUuidPattern === true
+        )->keys();
     }
 
     /**
-     * @return Collection
+     * @return Enumerable
      */
-    protected function boundResources(): Collection
+    protected function boundResources(): Enumerable
     {
         return morph_map()->filter(
-            fn($model, $key) => defined("$model::ROUTE_PARAM") && $model::ROUTE_PARAM === $key
+            fn($model, $key) => method_exists($model, 'routeParam') && $model::routeParam() === $key
         );
     }
 
@@ -59,10 +61,6 @@ class AbseilServiceProvider extends ServiceProvider
      */
     protected function mapRoutePatterns(): void
     {
-        if (! $this->app['config']->get('abseil.use_uuids')) {
-            return;
-        }
-
         $this->uuidParams()->each(
             fn(string $param) => $this->app['router']->pattern($param, self::$uuidPattern)
         );
@@ -73,10 +71,10 @@ class AbseilServiceProvider extends ServiceProvider
      */
     protected function mapRouteParameters(): void
     {
-        foreach ($this->boundResources() as $param => $class) {
+        foreach ($this->boundResources() as $param => $model) {
             $this->app['router']->bind(
                 $param,
-                fn($uuid) => ModelQuery::make($class::query(), request())->find($uuid)
+                fn($uuid) => ModelQuery::make($model, request())->find($uuid)
             );
         }
     }
@@ -86,7 +84,7 @@ class AbseilServiceProvider extends ServiceProvider
      */
     protected function guessPolicies(): void
     {
-        $config = $this->app['config']->get('abseil.policies');
+        $config = config('abseil.policies');
 
         if ($config['disable'] === true) {
             return;

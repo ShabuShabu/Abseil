@@ -3,7 +3,6 @@
 namespace ShabuShabu\Abseil\Tests\App;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
 use ShabuShabu\Abseil\Model;
 
 class Page extends Model
@@ -25,13 +24,12 @@ class Page extends Model
 
     protected static function booted(): void
     {
-        static::creating(static function(Model $model) {
+        static::creating(static function (Model $model) {
             if (! $model->user_id) {
                 $model->user_id = auth()->id();
             }
         });
     }
-
 
     public function user(): BelongsTo
     {
@@ -43,10 +41,10 @@ class Page extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function syncCategory(Collection $category): bool
+    public function syncCategory(Category $category): self
     {
-        $this->category()->associate($category->get('id'));
+        $this->category()->associate($category)->save();
 
-        return $this->save();
+        return $this;
     }
 }

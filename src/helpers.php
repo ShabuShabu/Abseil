@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace ShabuShabu\Abseil;
 
-use Illuminate\Support\{Arr, Collection, Facades\Route, Str};
+use Illuminate\Support\{Arr, Enumerable, Facades\Route, Str};
 use InvalidArgumentException;
 use LogicException;
 
 /**
- * @return \Illuminate\Support\Collection
+ * @return \Illuminate\Support\Enumerable
  */
-function morph_map(): Collection
+function morph_map(): Enumerable
 {
     $location = config('abseil.morph_map_location');
     $morphMap = "$location::MORPH_MAP";

@@ -3,11 +3,11 @@
 namespace ShabuShabu\Abseil\Http;
 
 use Closure;
-use Illuminate\Database\Eloquent\{Builder, Model, Relations\Relation};
+use Illuminate\Database\Eloquent\{Builder, Relations\Relation};
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\{Request as HttpRequest, Response};
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\{Arr, Collection as BaseCollection, Str};
+use Illuminate\Support\{Arr, Enumerable, Str};
 use LogicException;
 use ShabuShabu\Abseil\Contracts\{HeaderValues, Trashable};
 use ShabuShabu\Abseil\Events\{ResourceCreated,
@@ -17,9 +17,11 @@ use ShabuShabu\Abseil\Events\{ResourceCreated,
     ResourceUpdated
 };
 use ShabuShabu\Abseil\Http\Resources\Collection;
-use function ShabuShabu\Abseil\{inflate, resource_guard, resource_namespace};
+use ShabuShabu\Abseil\Model;
 use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
+use Throwable;
+use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
 
 class Controller extends BaseController
 {
@@ -46,7 +48,9 @@ class Controller extends BaseController
 
         $class = $query instanceof Builder ? get_class($query->getModel()) : $query;
 
-        $this->authorize('overview', $class);
+        if ($this->shouldAuthorize('overview')) {
+            $this->authorize('overview', $class);
+        }
 
         $resource = ($namespace = resource_namespace()) . class_basename($class);
 
@@ -122,7 +126,9 @@ class Controller extends BaseController
      */
     protected function showResource(HttpRequest $request, Model $model, string $resource = null)
     {
-        $this->authorize('view', $model);
+        if ($this->shouldAuthorize('view')) {
+            $this->authorize('view', $model);
+        }
 
         resource_guard(
             $resource = $resource ?: resource_namespace() . class_basename($model)
@@ -130,7 +136,7 @@ class Controller extends BaseController
 
         $includes = QueryBuilderRequest::fromRequest($request)
                                        ->includes()
-                                       ->intersect($model::ALLOWED_INCLUDES)
+                                       ->intersect($model::allowedIncludes())
                                        ->toArray();
 
         return new $resource(
@@ -173,7 +179,9 @@ class Controller extends BaseController
      */
     protected function deleteResource(Model $model): Response
     {
-        $this->authorize('delete', $model);
+        if ($this->shouldAuthorize('delete')) {
+            $this->authorize('delete', $model);
+        }
 
         if (! ($model instanceof Trashable ? $model->trashOrDelete() : $model->delete())) {
             return $this->badGateway();
@@ -193,7 +201,9 @@ class Controller extends BaseController
      */
     protected function restoreResource(Trashable $model): Response
     {
-        $this->authorize('delete', $model);
+        if ($this->shouldAuthorize('delete')) {
+            $this->authorize('delete', $model);
+        }
 
         if (! $model->trashed()) {
             return $this->notModified();
@@ -211,31 +221,62 @@ class Controller extends BaseController
     /**
      * Create or update the relationships
      *
-     * @param \ShabuShabu\Harness\Request         $request
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param \ShabuShabu\Harness\Request $request
+     * @param Model                       $model
      * @throws \Throwable
      */
     protected function saveRelationships(Request $request, Model $model): void
     {
         $relationships = collect($request->validated()['data'])->get('relationships', []);
 
-        foreach ($relationships as $name => $relationship) {
-            $method = 'sync' . Str::kebab($name);
+        foreach ($relationships as $type => $relationship) {
+            $this->handleRelationship($model, $type, $relationship);
+        }
+    }
 
-            throw_unless(
-                method_exists($model, $method),
-                LogicException::class,
-                sprintf(
-                    'Method [%s] does not exist for model [%s]',
-                    $method,
-                    get_class($model)
-                )
+    /**
+     * @param \ShabuShabu\Abseil\Model $model
+     * @param string                   $type
+     * @param array                    $relationship
+     * @throws \Throwable
+     */
+    protected function handleRelationship(Model $model, string $type, array $relationship): void
+    {
+        $method = 'sync' . Str::studly($type);
+
+        throw_unless(
+            method_exists($model, $method),
+            LogicException::class,
+            [sprintf('Method [%s] does not exist for model [%s]', $method, get_class($model))]
+        );
+
+        try {
+            $model->{$method}(
+                $relationship = static::hydrate($type, $relationship['data'])
             );
 
-            if ($model->{$method}(collect($relationship['data']))) {
-                ResourceRelationshipSaved::dispatch($model, $relationship);
-            }
+            ResourceRelationshipSaved::dispatch($model, $type, $relationship);
+        } catch (Throwable $e) {
+            // nada...
         }
+    }
+
+    /**
+     * @param string $type
+     * @param array  $data
+     * @return mixed
+     */
+    public static function hydrate(string $type, array $data)
+    {
+        $model = morph_map()->first(
+            fn($value, $key) => $key === $type
+        );
+
+        if (isset($data['id'])) {
+            return $model::findOrFail($data['id']);
+        }
+
+        return $model::whereIn('id', collect($data)->pluck('id'))->get();
     }
 
     /**
@@ -243,7 +284,7 @@ class Controller extends BaseController
      *
      * @param \ShabuShabu\Harness\Request $request
      * @param bool                        $asArray
-     * @return array|\Illuminate\Support\Collection
+     * @return array|\Illuminate\Support\Enumerable
      */
     protected function modelFieldsFrom(Request $request, bool $asArray = true): iterable
     {
@@ -254,7 +295,20 @@ class Controller extends BaseController
                 fn($value, $key) => [str_replace('attributes.', '', $key) => $value]
             )
             ->pipe(
-                fn(BaseCollection $collection) => inflate($collection, $asArray)
+                fn(Enumerable $collection) => inflate($collection, $asArray)
             );
+    }
+
+    /**
+     * @param string $ability
+     * @return bool
+     */
+    protected function shouldAuthorize(string $ability): bool
+    {
+        if (! property_exists($this, 'authorizeAbility')) {
+            return true;
+        }
+
+        return isset($this->authorizeAbility[$ability]) && $this->authorizeAbility[$ability] === true;
     }
 }

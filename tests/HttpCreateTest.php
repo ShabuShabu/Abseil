@@ -30,7 +30,7 @@ class HttpCreateTest extends TestCase
         $response = $this->postJson('pages', [
             'data' => [
                 'id'            => $pageId,
-                'type'          => Page::JSON_TYPE,
+                'type'          => Page::jsonType(),
                 'attributes'    => [
                     'title'   => 'About Us',
                     'content' => 'We are cool',
@@ -38,7 +38,7 @@ class HttpCreateTest extends TestCase
                 'relationships' => [
                     'category' => [
                         'data' => [
-                            'type' => Category::JSON_TYPE,
+                            'type' => Category::jsonType(),
                             'id'   => $category->id,
                         ],
                     ],
@@ -75,7 +75,7 @@ class HttpCreateTest extends TestCase
 
         $response = $this->postJson('pages', [
             'data' => [
-                'type'          => Page::JSON_TYPE,
+                'type'          => Page::jsonType(),
                 'attributes'    => [
                     'title'   => 'About Us',
                     'content' => 'We are cool',
@@ -83,7 +83,7 @@ class HttpCreateTest extends TestCase
                 'relationships' => [
                     'category' => [
                         'data' => [
-                            'type' => Category::JSON_TYPE,
+                            'type' => Category::jsonType(),
                             'id'   => $category->id,
                         ],
                     ],
@@ -116,7 +116,7 @@ class HttpCreateTest extends TestCase
 
         $response = $this->postJson('pages', [
             'data' => [
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title'   => 'About Us',
                     'content' => 'We are cool',
@@ -151,7 +151,7 @@ class HttpCreateTest extends TestCase
 
         $response = $this->postJson('pages', [
             'data' => [
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title' => 1,
                 ],

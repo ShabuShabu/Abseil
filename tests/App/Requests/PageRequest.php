@@ -3,8 +3,8 @@
 namespace ShabuShabu\Abseil\Tests\App\Requests;
 
 use ShabuShabu\Abseil\Tests\App\Category;
-use function ShabuShabu\Harness\r;
 use ShabuShabu\Harness\Request;
+use function ShabuShabu\Harness\r;
 
 class PageRequest extends Request
 {
@@ -18,7 +18,7 @@ class PageRequest extends Request
             'relationships' => [
                 'category' => [
                     'data' => [
-                        'type' => r()->nullable()->in([Category::JSON_TYPE]),
+                        'type' => r()->nullable()->in([Category::jsonType()]),
                         'id'   => r()->nullable()->uuid(),
                     ],
                 ],
@@ -43,7 +43,7 @@ class PageRequest extends Request
                 'category' => [
                     'data' => [
                         'type' => [
-                            'in' => 'The category relationship type must be ' . Category::JSON_TYPE,
+                            'in' => 'The category relationship type must be ' . Category::jsonType(),
                         ],
                         'id'   => [
                             'uuid' => 'The category relationship id is not a valid UUID',

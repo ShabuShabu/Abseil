@@ -17,7 +17,7 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 
 ## ToDo
 
-- Extract tests from original package
+- Allow ModelQuery to query by fields other than uuid, eg by slug
 - Publish to Packagist
 - Enjoy rock star status and live the good life
 
@@ -175,10 +175,9 @@ Here's an example request payload:
 Abseil will then call the following method so you can save the category as you see fit:
 
 ```php
-$result = $page->syncCategory(collect([
-    'type' => 'categories',
-    'id' => '9041eabb-932a-4d47-a767-6c799873354a'
-]));
+$result = $page->syncCategory(
+    Category::find('9041eabb-932a-4d47-a767-6c799873354a')
+);
 ```
 
 Abseil will throw an error if that method does not exist, so it's your responsibility to make sure it's there when you allow saving relationships via ShabuShabu Harness requests.
@@ -186,11 +185,10 @@ Abseil will throw an error if that method does not exist, so it's your responsib
 Staying with this example, the `Page::syncCategory` method could be as easy as the following:
 
 ```php
-public function syncCategory(Collection $category): bool
+public function syncCategory(Category $category): self
 {
-    $this->category()->associate($category->get('id'));
-
-    return $this->save();
+    $this->category()->associate($category)->save();
+    return $this;
 }
 ```
 

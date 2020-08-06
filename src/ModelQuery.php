@@ -2,7 +2,6 @@
 
 namespace ShabuShabu\Abseil;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\{AllowedFilter, QueryBuilder};
 
@@ -12,24 +11,27 @@ class ModelQuery
 
     protected Request $request;
 
+    protected string $model;
+
     /**
-     * @param Builder                  $query
+     * @param string                   $model
      * @param \Illuminate\Http\Request $request
      */
-    protected function __construct(Builder $query, Request $request)
+    protected function __construct(string $model, Request $request)
     {
-        $this->query   = QueryBuilder::for($query, $request);
+        $this->query   = QueryBuilder::for($model::query(), $request);
         $this->request = $request;
+        $this->model   = $model;
     }
 
     /**
-     * @param Builder                  $query
+     * @param string                   $model
      * @param \Illuminate\Http\Request $request
      * @return static
      */
-    public static function make(Builder $query, Request $request): self
+    public static function make(string $model, Request $request): self
     {
-        return new self($query, $request);
+        return new self($model, $request);
     }
 
     /**
@@ -38,9 +40,15 @@ class ModelQuery
      */
     public function find($uuid)
     {
-        return $this->query
-            ->allowedFilters($this->allowedFilters())
-            ->findOrFail($uuid);
+        $query = $this->query->allowedFilters($this->allowedFilters());
+
+        if (! method_exists($this->model, 'methodForModelQuery')) {
+            return $query->findOrFail($uuid);
+        }
+
+        $method = $this->model::methodForModelQuery($uuid);
+
+        return $query->$method($uuid)->firstOrFail();
     }
 
     /**

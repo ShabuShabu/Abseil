@@ -31,7 +31,7 @@ class HttpPatchTest extends TestCase
         $response = $this->patchJson('pages/' . $page->id, [
             'data' => [
                 'id'         => $page->id,
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title' => 'About Us',
                 ],
@@ -70,14 +70,14 @@ class HttpPatchTest extends TestCase
         $response = $this->patchJson('pages/' . $page->id, [
             'data' => [
                 'id'            => $page->id,
-                'type'          => Page::JSON_TYPE,
+                'type'          => Page::jsonType(),
                 'attributes'    => [
                     'title' => 'About Us',
                 ],
                 'relationships' => [
                     'category' => [
                         'data' => [
-                            'type' => Category::JSON_TYPE,
+                            'type' => Category::jsonType(),
                             'id'   => $category->id,
                         ],
                     ],
@@ -116,7 +116,7 @@ class HttpPatchTest extends TestCase
         $response = $this->patchJson('pages/' . $page->id, [
             'data' => [
                 'id'         => $page->id,
-                'type'       => Page::JSON_TYPE,
+                'type'       => Page::jsonType(),
                 'attributes' => [
                     'title' => 1,
                 ],

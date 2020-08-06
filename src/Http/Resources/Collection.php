@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Support\Enumerable;
 
 class Collection extends ResourceCollection
 {
@@ -41,9 +42,9 @@ class Collection extends ResourceCollection
      */
     protected function includes()
     {
-        /** @var BaseCollection $includes */
-        $includes = $this->resource->reduce(function(BaseCollection $collection, Resource $resource) {
-            $includes = collect($resource->resource::ALLOWED_INCLUDES)
+        /** @var Enumerable $includes */
+        $includes = $this->resource->reduce(function (BaseCollection $collection, Resource $resource) {
+            $includes = collect($resource->resource::allowedIncludes())
                 ->reduce(
                     fn(BaseCollection $includes, string $relation) => $this->included(
                         $includes,
@@ -65,14 +66,14 @@ class Collection extends ResourceCollection
     }
 
     /**
-     * @param \Illuminate\Support\Collection      $includes
+     * @param \Illuminate\Support\Enumerable      $includes
      * @param string                              $relation
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Enumerable
      */
-    protected function included(BaseCollection $includes, string $relation, Model $model): BaseCollection
+    protected function included(Enumerable $includes, string $relation, Model $model): Enumerable
     {
-        $included = $this->isLoaded($model, $relation, function() use ($relation, $model) {
+        $included = $this->isLoaded($model, $relation, function () use ($relation, $model) {
             $resource = $this->resourceClass($model->{$relation});
 
             return new $resource($model->{$relation});

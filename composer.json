@@ -16,12 +16,6 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ShabuShabu/Harness"
-        }
-    ],
     "require": {
         "php": "^7.4",
         "illuminate/database": "^7.0",

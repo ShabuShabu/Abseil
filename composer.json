@@ -4,7 +4,7 @@
     "keywords": [
         "shabushabu",
         "abseil",
-        "json:api"
+        "json-api"
     ],
     "homepage": "https://github.com/ShabuShabu/Abseil",
     "license": "MIT",
@@ -26,7 +26,7 @@
         "illuminate/support": "^7.0",
         "nesbot/carbon": "^2.0",
         "ramsey/uuid": "^4.0",
-        "shabushabu/harness": "1.0.x-dev",
+        "shabushabu/harness": "^0.2.0",
         "spatie/laravel-query-builder": "^3.0"
     },
     "require-dev": {

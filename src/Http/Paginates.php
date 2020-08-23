@@ -3,7 +3,6 @@
 namespace ShabuShabu\Abseil\Http;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use ShabuShabu\Abseil\Contracts\Queryable;
 use Spatie\QueryBuilder\QueryBuilder;

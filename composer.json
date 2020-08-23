@@ -33,7 +33,7 @@
         "nesbot/carbon": "^2.0",
         "ramsey/uuid": "^4.0",
         "shabushabu/harness": "1.0.x-dev",
-        "spatie/laravel-query-builder": "^2.0"
+        "spatie/laravel-query-builder": "^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

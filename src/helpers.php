@@ -74,17 +74,16 @@ function resource_guard($resource): void
 
 /**
  * @param iterable $array
- * @param bool     $asArray
  * @return array
  */
-function inflate(iterable $array, bool $asArray = true): iterable
+function inflate(iterable $array): iterable
 {
     $inflated = [];
     foreach ($array as $key => $value) {
         Arr::set($inflated, $key, $value);
     }
 
-    return $asArray ? $inflated : collect($inflated);
+    return $inflated;
 }
 
 /**

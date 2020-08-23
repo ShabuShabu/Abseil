@@ -34,7 +34,7 @@ class Resource extends JsonResource
             'type'          => $this->config('jsonType'),
             'attributes'    => $this->resourceAttributes($request),
             'links'         => [
-                'self' => $this->resource->url(),
+                'self' => $this->resource->url() ?? new MissingValue(),
             ],
             'relationships' => $this->relationships(),
         ];
@@ -79,9 +79,13 @@ class Resource extends JsonResource
      * @param \Carbon\CarbonInterface|null $date
      * @return string|null
      */
-    protected function date(?CarbonInterface $date): ?string
+    protected function date(?CarbonInterface $date, ?string $format = null): ?string
     {
-        return $date instanceof CarbonInterface ? $date->toJSON() : null;
+        if (!$date instanceof CarbonInterface) {
+            return null;
+        }
+
+        return $format ? $date->format($format) : $date->toJSON();
     }
 
     /**

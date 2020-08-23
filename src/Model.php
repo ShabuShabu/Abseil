@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use ShabuShabu\Abseil\Contracts\{Abseil, HeaderValues, Queryable};
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * ShabuShabu\Abseil\Model
@@ -21,6 +22,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  * @method static Builder whereNotIn($column, $values, $boolean = 'and')
  * @method static Builder where($column, $value)
  * @method static Builder withoutGlobalScope($scope)
+ * @method static Builder withoutGlobalScopes()
  * @method static LengthAwarePaginator paginate($perPage, $columns, $pageName, $page)
  */
 abstract class Model extends Eloquent implements Abseil, HeaderValues, Queryable
@@ -89,8 +91,12 @@ abstract class Model extends Eloquent implements Abseil, HeaderValues, Queryable
     /**
      * {@inheritDoc}
      */
-    public function url(): string
+    public function url(): ?string
     {
-        return route(static::jsonType() . '.show', [static::routeParam() => $this->getKey()]);
+        try {
+            return route(static::jsonType() . '.show', [static::routeParam() => $this->getKey()]);
+        } catch (RouteNotFoundException $exception) {
+            return null;
+        }
     }
 }

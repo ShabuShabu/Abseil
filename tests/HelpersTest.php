@@ -2,7 +2,6 @@
 
 namespace ShabuShabu\Abseil\Tests;
 
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ShabuShabu\Abseil\AbseilServiceProvider;
@@ -71,7 +70,7 @@ class HelpersTest extends TestCase
             'entirely'          => 'yup',
         ];
 
-        $actual   = inflate($array, true);
+        $actual   = inflate($array);
         $expected = [
             'some'     => [
                 'nested' => [
@@ -83,11 +82,5 @@ class HelpersTest extends TestCase
         ];
 
         $this->assertEquals($expected, $actual);
-
-        $actual   = inflate($array, false);
-        $expected = collect($expected);
-
-        $this->assertInstanceOf(Collection::class, $actual);
-        $this->assertEquals($expected->all(), $actual->all());
     }
 }

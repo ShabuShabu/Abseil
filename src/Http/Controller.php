@@ -22,6 +22,7 @@ use ShabuShabu\Harness\Request;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use Throwable;
 use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
+use function ShabuShabu\Harness\to_snake_case;
 
 class Controller extends BaseController
 {
@@ -42,11 +43,9 @@ class Controller extends BaseController
      */
     public function resourceCollection($query, HttpRequest $request): Collection
     {
-        if ($query instanceof Relation) {
-            $query = $query->getQuery();
-        }
-
-        $class = $query instanceof Builder ? get_class($query->getModel()) : $query;
+        $class = $query instanceof Builder || $query instanceof Relation ?
+            get_class($query->getModel()) :
+            $query;
 
         if ($this->shouldAuthorize('overview')) {
             $this->authorize('overview', $class);
@@ -147,9 +146,9 @@ class Controller extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param Request  $request
-     * @param Model    $model
-     * @param \Closure $callback
+     * @param Request       $request
+     * @param Model         $model
+     * @param \Closure|null $callback
      * @return Response
      * @throws \Throwable
      */
@@ -244,59 +243,59 @@ class Controller extends BaseController
     {
         $method = 'sync' . Str::studly($type);
 
-        throw_unless(
-            method_exists($model, $method),
-            LogicException::class,
-            [sprintf('Method [%s] does not exist for model [%s]', $method, get_class($model))]
-        );
+        if (! method_exists($model, $method)) {
+            throw new LogicException(
+                sprintf('Method [%s] does not exist for model [%s]', $method, get_class($model))
+            );
+        }
 
         try {
             $model->{$method}(
-                $relationship = static::hydrate($type, $relationship['data'])
+                $relationship = static::hydrate($relationship['data'])
             );
 
             ResourceRelationshipSaved::dispatch($model, $type, $relationship);
         } catch (Throwable $e) {
-            // nada...
+            // fail silently...
         }
     }
 
     /**
-     * @param string $type
-     * @param array  $data
+     * @param array $data
      * @return mixed
      */
-    public static function hydrate(string $type, array $data)
+    public static function hydrate(array $data)
     {
+        $type = $data['type'] ?? collect($data)->pluck('type')->first();
+
         $model = morph_map()->first(
-            fn($value, $key) => $key === $type
+            fn($value, $key) => $key === Str::singular($type)
         );
 
         if (isset($data['id'])) {
-            return $model::findOrFail($data['id']);
+            return $model::query()->findOrFail($data['id']);
         }
 
-        return $model::whereIn('id', collect($data)->pluck('id'))->get();
+        return $model::query()->whereIn('id', collect($data)->pluck('id'))->get();
     }
 
     /**
      * Flatten the attributes and the id to an array for insertion
      *
      * @param \ShabuShabu\Harness\Request $request
-     * @param bool                        $asArray
-     * @return array|\Illuminate\Support\Enumerable
+     * @return array
      */
-    protected function modelFieldsFrom(Request $request, bool $asArray = true): iterable
+    protected function modelFieldsFrom(Request $request): array
     {
-        $data = Arr::only($request->validated()['data'], ['id', 'attributes']);
-
-        return collect(Arr::dot($data))
-            ->mapWithKeys(
-                fn($value, $key) => [str_replace('attributes.', '', $key) => $value]
-            )
-            ->pipe(
-                fn(Enumerable $collection) => inflate($collection, $asArray)
-            );
+        return collect(Arr::dot(
+            Arr::only($request->validated()['data'], ['id', 'attributes'])
+        ))->mapWithKeys(
+            fn($value, $key) => [str_replace('attributes.', '', $key) => $value]
+        )->filter(
+            fn($value, $key) => ! Str::endsWith($key, '_confirmation')
+        )->pipe(
+            fn(Enumerable $collection) => to_snake_case(inflate($collection))
+        );
     }
 
     /**

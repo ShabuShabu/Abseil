@@ -6,8 +6,8 @@ use Carbon\CarbonInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Support\{Collection, Enumerable};
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\{Collection, Enumerable};
 use ShabuShabu\Abseil\Model;
 use stdClass;
 
@@ -81,7 +81,7 @@ class Resource extends JsonResource
      */
     protected function date(?CarbonInterface $date, ?string $format = null): ?string
     {
-        if (!$date instanceof CarbonInterface) {
+        if (! $date instanceof CarbonInterface) {
             return null;
         }
 
@@ -125,7 +125,7 @@ class Resource extends JsonResource
      */
     protected function included(Enumerable $includes, string $relation): Enumerable
     {
-        $included = $this->whenLoaded($relation, function () use ($relation) {
+        $included = $this->whenLoaded($relation, function() use ($relation) {
             $related = $this->resource->{$relation};
 
             $resource = $this->resourceClass($related);

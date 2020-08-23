@@ -43,7 +43,7 @@ class Collection extends ResourceCollection
     protected function includes()
     {
         /** @var Enumerable $includes */
-        $includes = $this->resource->reduce(function (BaseCollection $collection, Resource $resource) {
+        $includes = $this->resource->reduce(function(BaseCollection $collection, Resource $resource) {
             $includes = collect($resource->resource::allowedIncludes())
                 ->reduce(
                     fn(BaseCollection $includes, string $relation) => $this->included(
@@ -73,7 +73,7 @@ class Collection extends ResourceCollection
      */
     protected function included(Enumerable $includes, string $relation, Model $model): Enumerable
     {
-        $included = $this->isLoaded($model, $relation, function () use ($relation, $model) {
+        $included = $this->isLoaded($model, $relation, function() use ($relation, $model) {
             $resource = $this->resourceClass($model->{$relation});
 
             return new $resource($model->{$relation});

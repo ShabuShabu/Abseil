@@ -3,8 +3,8 @@
 namespace ShabuShabu\Abseil\Tests\App\Requests;
 
 use ShabuShabu\Abseil\Tests\App\Category;
-use ShabuShabu\Harness\Request;
 use function ShabuShabu\Harness\r;
+use ShabuShabu\Harness\Request;
 
 class PageRequest extends Request
 {

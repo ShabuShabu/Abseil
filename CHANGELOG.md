@@ -2,6 +2,6 @@
 
 All notable changes to `Abseil` will be documented in this file
 
-## 1.0.0 - 202X-XX-XX
+## 0.1.0 - 2020-04-15
 
-- initial release
+- First alpha pre-release

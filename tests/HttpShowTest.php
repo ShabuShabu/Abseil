@@ -102,4 +102,47 @@ class HttpShowTest extends TestCase
         $this->assertEquals($page->category->id, $response->json('data.relationships.category.data.id'));
         $this->assertEquals(Category::jsonType(), $response->json('data.relationships.category.data.type'));
     }
+
+    /**
+     * @test
+     */
+    public function ensure_that_a_valid_json_api_resource_is_returned_including_a_collection_relationship(): void
+    {
+        $this->actingAs($this->authenticatedUser);
+
+        $category = factory(Category::class)->states('withId')->create();
+
+        $pages = factory(Page::class, 3)->create([
+            'category_id' => $category->id,
+        ]);
+
+        $response = $this->getJson('categories/' . $category->id . '?include=pages', [
+            'Accept' => Resource::MEDIA_TYPE,
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK)
+                 ->assertJsonStructure([
+                     'data' => [
+                         'id',
+                         'type',
+                         'attributes'    => [
+                             'title',
+                             'createdAt',
+                             'updatedAt',
+                         ],
+                         'links',
+                         'relationships' => [
+                             'pages' => [
+                                 'data' => [
+                                     [
+                                         'id',
+                                         'type',
+                                     ],
+                                 ],
+                             ],
+                         ],
+                     ],
+                     'included',
+                 ]);
+    }
 }

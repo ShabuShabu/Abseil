@@ -18,7 +18,6 @@ Taking some of the pain out of creating a [JSON:API](https://jsonapi.org/) in yo
 ## ToDo
 
 - Allow ModelQuery to query by fields other than uuid, eg by slug
-- Publish to Packagist
 - Enjoy rock star status and live the good life
 
 ## Installation

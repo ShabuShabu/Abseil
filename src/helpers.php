@@ -98,8 +98,10 @@ function get_first_resource(string $namespace, $model, string $suffix = '')
     $resource  = $namespace . class_basename($model) . $suffix;
 
     while (! class_exists($resource)) {
+        $current = is_string($model) ? $model : get_class($model);
+
         if (! $model = get_parent_class($model)) {
-            throw new LogicException('No parent class found.');
+            throw new LogicException("No parent class found for [$current].");
         }
 
         $resource = $namespace . class_basename($model) . $suffix;

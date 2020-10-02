@@ -5,7 +5,7 @@ namespace ShabuShabu\Abseil\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ShabuShabu\Abseil\AbseilServiceProvider;
-use function ShabuShabu\Abseil\{inflate, resource_guard, to_camel_case};
+use function ShabuShabu\Abseil\{inflate, resource_guard, to_camel_case, tokenize, tokenize_all};
 
 class HelpersTest extends TestCase
 {
@@ -82,5 +82,36 @@ class HelpersTest extends TestCase
         ];
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function ensure_that_a_dotted_string_can_be_tokenized(): void
+    {
+        $string = 'user.roles.just.a.test';
+
+        $this->assertEquals('user', tokenize($string, 1));
+        $this->assertEquals('user.roles', tokenize($string, 2));
+        $this->assertEquals('user.roles.just', tokenize($string, 3));
+        $this->assertEquals('user.roles.just.a', tokenize($string, 4));
+        $this->assertEquals('user.roles.just.a.test', tokenize($string, 5));
+        $this->assertEquals('user.roles.just.a.test', tokenize($string, 27));
+    }
+
+    /**
+     * @test
+     */
+    public function ensure_that_a_dotted_string_can_be_broken_into_tokens(): void
+    {
+        $expected = [
+            'user',
+            'user.roles',
+            'user.roles.just',
+            'user.roles.just.a',
+            'user.roles.just.a.test',
+        ];
+
+        $this->assertEquals($expected, tokenize_all('user.roles.just.a.test'));
     }
 }

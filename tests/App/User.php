@@ -7,7 +7,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\{Relations\HasMany, SoftDeletes};
+use Illuminate\Database\Eloquent\{Relations\BelongsToMany, Relations\HasMany, SoftDeletes};
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use ShabuShabu\Abseil\Contracts\Trashable;
@@ -42,6 +42,11 @@ class User extends Model implements Trashable, AuthorizableContract, Authenticat
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
     public function pages(): HasMany
     {

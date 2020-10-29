@@ -42,13 +42,11 @@ class ModelQuery
     {
         $query = $this->query->allowedFilters($this->allowedFilters());
 
-        if (! method_exists($this->model, 'methodForModelQuery')) {
+        if (! method_exists($this->model, 'getForModelQuery')) {
             return $query->findOrFail($uuid);
         }
 
-        $method = $this->model::methodForModelQuery($uuid);
-
-        return $query->$method($uuid)->firstOrFail();
+        return $this->model::getForModelQuery($query, $uuid);
     }
 
     /**

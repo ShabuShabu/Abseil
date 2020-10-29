@@ -135,6 +135,10 @@ class Resource extends JsonResource
                 return new $resource($related);
             }
 
+            if ($related->isEmpty()) {
+                return new MissingValue();
+            }
+
             $resource = $this->resourceClass($related->first());
 
             return $related->map(fn($rel) => new $resource($rel));

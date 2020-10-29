@@ -93,6 +93,10 @@ abstract class Model extends Eloquent implements Abseil, HeaderValues, Queryable
      */
     public function url(): ?string
     {
+        if (! $this->exists) {
+            return null;
+        }
+
         try {
             return route(static::jsonType() . '.show', [static::routeParam() => $this->getKey()]);
         } catch (RouteNotFoundException $exception) {

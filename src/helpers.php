@@ -109,3 +109,34 @@ function get_first_resource(string $namespace, $model, string $suffix = '')
 
     return $resource;
 }
+
+/**
+ * @param string   $string
+ * @param int|null $len
+ * @return string
+ */
+function tokenize(string $string, ?int $len = null): string
+{
+    return implode('.', array_slice(explode('.', $string), 0, $len));
+}
+
+/**
+ * @param string $string
+ * @return array
+ */
+function tokenize_all(string $string): array
+{
+    $tokens = [];
+    if (($count = substr_count($string, '.')) > 0) {
+        $i = 1;
+
+        while ($i <= $count) {
+            $tokens[] = tokenize($string, $i);
+            $i++;
+        }
+    }
+
+    $tokens[] = $string;
+
+    return array_unique($tokens);
+}

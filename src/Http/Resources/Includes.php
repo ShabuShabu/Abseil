@@ -17,7 +17,7 @@ trait Includes
         }
 
         return [
-            'included' => $includes,
+            'included' => array_values($includes),
         ];
     }
 

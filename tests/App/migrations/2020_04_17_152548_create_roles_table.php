@@ -13,13 +13,13 @@ class CreateRolesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', static function (Blueprint $table) {
+        Schema::create('roles', static function(Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->timestamps();
         });
 
-        Schema::create('role_user', static function (Blueprint $table) {
+        Schema::create('role_user', static function(Blueprint $table) {
             $table->primary(['role_id', 'user_id']);
 
             $table->uuid('user_id');

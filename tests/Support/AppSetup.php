@@ -5,9 +5,9 @@ namespace ShabuShabu\Abseil\Tests\Support;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Routing\Router;
 use ShabuShabu\Abseil\AbseilServiceProvider;
-use ShabuShabu\Abseil\Tests\App\{Category, Exceptions\Handler, Page, Role, User};
 use ShabuShabu\Abseil\Tests\App\Controllers\{CategoryController, PageController, UserController};
 use ShabuShabu\Abseil\Tests\App\Providers\AppServiceProvider;
+use ShabuShabu\Abseil\Tests\App\{Category, Exceptions\Handler, Page, Role, User};
 use ShabuShabu\Harness\HarnessServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderServiceProvider;
 
@@ -52,7 +52,7 @@ trait AppSetup
      */
     protected function setupRouting(Router $router): void
     {
-        $router->middleware(['bindings'])->group(static function (Router $router) {
+        $router->middleware(['bindings'])->group(static function(Router $router) {
             $routing = [
                 [PageController::class, Page::jsonType(), Page::routeParam(), false, []],
                 [CategoryController::class, Category::jsonType(), Category::routeParam(), false, []],

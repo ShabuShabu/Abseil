@@ -18,11 +18,11 @@ use ShabuShabu\Abseil\Events\{ResourceCreated,
 };
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Model;
-use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
 use ShabuShabu\Harness\Request;
-use function ShabuShabu\Harness\to_snake_case;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use Throwable;
+use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
+use function ShabuShabu\Harness\to_snake_case;
 
 class Controller extends BaseController
 {
@@ -38,10 +38,11 @@ class Controller extends BaseController
      *
      * @param mixed                    $query
      * @param \Illuminate\Http\Request $request
+     * @param bool                     $queryBuilder
      * @return Collection
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function resourceCollection($query, HttpRequest $request): Collection
+    public function resourceCollection($query, HttpRequest $request, bool $queryBuilder = true): Collection
     {
         $class = $query instanceof Builder || $query instanceof Relation ?
             get_class($query->getModel()) :
@@ -64,7 +65,7 @@ class Controller extends BaseController
         resource_guard($collection);
 
         return new $collection(
-            $this->paginate($query, $request),
+            $this->paginate($query, $request, $queryBuilder),
             $resource
         );
     }

@@ -14,17 +14,20 @@ trait Paginates
      *
      * @param mixed                    $query
      * @param \Illuminate\Http\Request $request
+     * @param bool                     $queryBuilder
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($query, Request $request): LengthAwarePaginator
+    public function paginate($query, Request $request, bool $queryBuilder = true): LengthAwarePaginator
     {
         ['number' => $page, 'size' => $perPage] = $request->input('page');
 
-        $query = QueryBuilder::for($query, $request);
-        $model = $query->getModel();
+        if ($queryBuilder) {
+            $query = QueryBuilder::for($query, $request);
+            $model = $query->getModel();
 
-        if ($model instanceof Queryable) {
-            $query = $model::modifyPagedQuery($query, $request);
+            if ($model instanceof Queryable) {
+                $query = $model::modifyPagedQuery($query, $request);
+            }
         }
 
         return $query->paginate($perPage, ['*'], 'page[number]', $page)

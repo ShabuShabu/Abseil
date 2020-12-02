@@ -18,11 +18,11 @@ use ShabuShabu\Abseil\Events\{ResourceCreated,
 };
 use ShabuShabu\Abseil\Http\Resources\Collection;
 use ShabuShabu\Abseil\Model;
+use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
 use ShabuShabu\Harness\Request;
+use function ShabuShabu\Harness\to_snake_case;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use Throwable;
-use function ShabuShabu\Abseil\{inflate, morph_map, resource_guard, resource_namespace};
-use function ShabuShabu\Harness\to_snake_case;
 
 class Controller extends BaseController
 {

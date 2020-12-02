@@ -93,6 +93,10 @@ class Collection extends ResourceCollection
             return $related->map(fn($rel) => new $resource($rel));
         }, []);
 
+        if ($included instanceof Enumerable) {
+            return $includes->merge($included);
+        }
+
         return $includes->push($included);
     }
 

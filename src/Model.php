@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  * @method static Builder whereNotIn($column, $values, $boolean = 'and')
  * @method static Builder where($column, $value)
  * @method static Builder withoutGlobalScope($scope)
- * @method static Builder withoutGlobalScopes()
+ * @method static Builder withoutGlobalScopes($scopes)
  * @method static LengthAwarePaginator paginate($perPage, $columns, $pageName, $page)
  */
 abstract class Model extends Eloquent implements Abseil, HeaderValues, Queryable
